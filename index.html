@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NN CART</title>
+    <style>
+        body { margin: 0; font-family: sans-serif; background: #f9f9f9; }
+        .header { background: #fff; padding: 15px; text-align: center; font-weight: bold; font-size: 20px; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 10; }
+        #video-feed { padding: 10px; display: flex; flex-direction: column; align-items: center; }
+        .video-card { background: #fff; margin-bottom: 20px; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        video { width: 100%; display: block; }
+        .info { padding: 15px; }
+        .price { color: #ff3f6c; font-size: 22px; font-weight: bold; }
+        .buy-btn { width: 100%; background: #ff3f6c; color: #fff; border: none; padding: 12px; border-radius: 8px; margin-top: 10px; font-weight: bold; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <div class="header">NN CART</div>
+    <div id="video-feed">Products load ho rahe hain...</div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.1.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.1/firebase-firestore-compat.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
