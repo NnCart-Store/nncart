@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NnCart - Real Meesho Style</title>
+    <title>NnCart Store</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .meesho-pink { background-color: #f43397; }
+        .nn-pink { background-color: #f43397; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        .cat-card { min-width: 80px; text-align: center; }
-        .cat-img { width: 60px; height: 60px; border-radius: 50%; background: #fdf2f8; margin: 0 auto; object-fit: cover; }
-        .offer-banner { background: linear-gradient(to right, #800000, #f43397); border-radius: 10px; }
+        .cat-img { width: 65px; height: 65px; border-radius: 50%; border: 2px solid #fce7f3; padding: 2px; object-fit: cover; }
+        .offer-gradient { background: linear-gradient(135deg, #800000 0%, #f43397 100%); border-radius: 12px; }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -18,53 +17,57 @@
     <header class="bg-white p-3 sticky top-0 z-50 shadow-sm">
         <div class="flex items-center justify-between mb-3">
             <div class="flex items-center gap-2">
-                <span class="text-gray-600 text-xl">☰</span>
-                <h1 class="text-pink-600 font-bold text-2xl italic">meesho</h1>
+                <span class="text-gray-600 text-2xl">☰</span>
+                <h1 class="text-pink-600 font-bold text-2xl italic tracking-tight">NnCart</h1>
             </div>
-            <div class="flex gap-4 text-gray-600">
+            <div class="flex gap-4 text-gray-500 text-xl">
                 <span>❤️</span><span>🛒</span>
             </div>
         </div>
         <div class="relative">
-            <input type="text" placeholder="Search for Sarees, Kurtis, Shoes..." class="w-full p-2 pl-10 border border-gray-300 rounded-md outline-none text-sm">
-            <span class="absolute left-3 top-2 text-gray-400">🔍</span>
+            <input type="text" placeholder="Search for Suits, Shoes, Kids wear..." class="w-full p-2.5 pl-10 border border-gray-200 rounded-lg outline-none text-sm bg-gray-50">
+            <span class="absolute left-3 top-3 text-gray-400">🔍</span>
         </div>
     </header>
 
-    <div class="flex gap-4 overflow-x-auto p-4 bg-white no-scrollbar">
-        <div class="cat-card">
-            <img src="https://images.meesho.com/images/products/314143425/v0u8n_512.webp" class="cat-img">
-            <p class="text-[10px] mt-1 font-medium">Shoes</p>
+    <div class="flex gap-5 overflow-x-auto p-4 bg-white no-scrollbar border-b border-gray-100">
+        <div class="text-center min-w-[70px]">
+            <img src="https://images.meesho.com/images/products/314143425/v0u8n_512.webp" class="cat-img mx-auto">
+            <p class="text-[11px] mt-1.5 font-semibold text-gray-700">Shoes</p>
         </div>
-        <div class="cat-card">
-            <img src="https://images.meesho.com/images/products/392765123/v0u8n_512.webp" class="cat-img">
-            <p class="text-[10px] mt-1 font-medium">Kurtis</p>
+        <div class="text-center min-w-[70px]">
+            <img src="https://images.meesho.com/images/products/392765123/v0u8n_512.webp" class="cat-img mx-auto">
+            <p class="text-[11px] mt-1.5 font-semibold text-gray-700">Suits</p>
         </div>
-        <div class="cat-card">
-            <div class="cat-img flex items-center justify-center text-2xl">🧸</div>
-            <p class="text-[10px] mt-1 font-medium">Kids</p>
+        <div class="text-center min-w-[70px]">
+            <div class="cat-img mx-auto flex items-center justify-center text-2xl bg-pink-50">🧸</div>
+            <p class="text-[11px] mt-1.5 font-semibold text-gray-700">Kids</p>
         </div>
-        <div class="cat-card">
-            <div class="cat-img flex items-center justify-center text-2xl">👔</div>
-            <p class="text-[10px] mt-1 font-medium">Men</p>
+        <div class="text-center min-w-[70px]">
+            <div class="cat-img mx-auto flex items-center justify-center text-2xl bg-blue-50">👔</div>
+            <p class="text-[11px] mt-1.5 font-semibold text-gray-700">Men</p>
         </div>
-        <div class="cat-card">
-            <div class="cat-img flex items-center justify-center text-2xl">💄</div>
-            <p class="text-[10px] mt-1 font-medium">Beauty</p>
-        </div>
-    </div>
-
-    <div class="p-3">
-        <div class="offer-banner p-4 text-white text-center shadow-lg">
-            <h2 class="text-xl font-black tracking-widest uppercase text-yellow-400">Offer Zone</h2>
-            <p class="text-[10px] font-bold">SALE FROM ₹99 | UP TO 80% OFF</p>
+        <div class="text-center min-w-[70px]">
+            <div class="cat-img mx-auto flex items-center justify-center text-2xl bg-purple-50">👗</div>
+            <p class="text-[11px] mt-1.5 font-semibold text-gray-700">Ladies</p>
         </div>
     </div>
 
     <div class="p-3">
-        <h3 class="font-bold text-gray-800 mb-3 border-l-4 border-pink-500 pl-2">Products For You</h3>
+        <div class="offer-gradient p-5 text-white text-center shadow-md">
+            <h2 class="text-xl font-black tracking-widest uppercase text-yellow-300">NnCart Offer Zone</h2>
+            <p class="text-[11px] font-bold mt-1 opacity-90">CLOTHING & MORE | UP TO 70% OFF</p>
+            <div class="inline-block mt-2 bg-white text-pink-600 px-3 py-1 rounded-full text-[10px] font-bold">SHOP NOW</div>
+        </div>
+    </div>
+
+    <div class="p-3">
+        <div class="flex items-center gap-2 mb-4">
+            <div class="w-1.5 h-6 nn-pink rounded-full"></div>
+            <h3 class="font-bold text-gray-800 text-lg">Products For You</h3>
+        </div>
         <div id="product-list" class="grid grid-cols-2 gap-3">
-            <p class="col-span-2 text-center py-10 text-gray-400">Loading Latest Collection...</p>
+            <p class="col-span-2 text-center py-20 text-gray-400 animate-pulse">Fetching NnCart Collection...</p>
         </div>
     </div>
 
@@ -83,29 +86,31 @@
                 rows.forEach((row, index) => {
                     if (index === 0) return;
 
-                    const name = row.c[0] ? row.c[0].v : 'Meesho Product';
+                    const name = row.c[0] ? row.c[0].v : 'NnCart Product';
                     const price = row.c[1] ? row.c[1].v : '0';
                     const img = row.c[2] ? row.c[2].v : '';
 
                     if(img) {
                         html += `
-                        <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden flex flex-col">
-                            <img src="${img.trim()}" class="w-full h-48 object-contain p-2">
-                            <div class="p-2 bg-white">
-                                <p class="text-gray-500 text-[11px] truncate">${name}</p>
-                                <div class="flex items-center gap-1 mt-1">
-                                    <span class="text-lg font-bold">₹${price}</span>
-                                    <span class="text-[9px] text-gray-400 line-through">₹${parseInt(price)+200}</span>
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col hover:shadow-md transition-shadow">
+                            <img src="${img.trim()}" class="w-full h-44 object-contain p-3 bg-white" onerror="this.src='https://via.placeholder.com/200?text=NnCart'">
+                            <div class="p-3">
+                                <p class="text-gray-500 text-[11px] font-medium truncate mb-1">${name}</p>
+                                <div class="flex items-baseline gap-1">
+                                    <span class="text-lg font-bold text-gray-900">₹${price}</span>
+                                    <span class="text-[10px] text-gray-400 line-through font-normal">₹${parseInt(price)+250}</span>
                                 </div>
-                                <div class="bg-green-100 text-[9px] text-green-700 font-bold px-2 py-0.5 rounded-full inline-block mt-1">Free Delivery</div>
-                                <button class="mt-3 w-full meesho-pink text-white text-xs py-2 rounded font-bold">BUY NOW</button>
+                                <div class="flex items-center gap-1 mt-1">
+                                    <span class="bg-green-50 text-[10px] text-green-600 font-bold px-2 py-0.5 rounded">Free Delivery</span>
+                                </div>
+                                <button class="mt-3 w-full nn-pink text-white text-xs py-2.5 rounded-lg font-bold shadow-sm active:scale-95 transition-transform">BUY NOW</button>
                             </div>
                         </div>`;
                     }
                 });
                 document.getElementById('product-list').innerHTML = html;
             } catch (e) {
-                document.getElementById('product-list').innerHTML = "Check Sheet ID!";
+                document.getElementById('product-list').innerHTML = "<p class='col-span-2 text-center text-red-400'>Error loading NnCart data!</p>";
             }
         }
         loadProducts();
