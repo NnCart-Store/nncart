@@ -3,49 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NnCart - Meesho Style</title>
+    <title>NnCart - Real Meesho Style</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .meesho-pink { background-color: #f43397; }
-        .product-card { border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .cat-card { min-width: 80px; text-align: center; }
+        .cat-img { width: 60px; height: 60px; border-radius: 50%; background: #fdf2f8; margin: 0 auto; object-fit: cover; }
+        .offer-banner { background: linear-gradient(to right, #800000, #f43397); border-radius: 10px; }
     </style>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-50">
 
-    <header class="meesho-pink p-4 sticky top-0 z-50">
-        <div class="flex items-center justify-between text-white">
-            <h1 class="text-xl font-bold italic">NnCart</h1>
-            <div class="flex gap-4">
-                <span>🔍</span>
-                <span>🛒</span>
+    <header class="bg-white p-3 sticky top-0 z-50 shadow-sm">
+        <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+                <span class="text-gray-600 text-xl">☰</span>
+                <h1 class="text-pink-600 font-bold text-2xl italic">meesho</h1>
+            </div>
+            <div class="flex gap-4 text-gray-600">
+                <span>❤️</span><span>🛒</span>
             </div>
         </div>
-        <div class="mt-3">
-            <input type="text" placeholder="Search for products..." class="w-full p-2 rounded-md outline-none text-gray-700">
+        <div class="relative">
+            <input type="text" placeholder="Search for Sarees, Kurtis, Shoes..." class="w-full p-2 pl-10 border border-gray-300 rounded-md outline-none text-sm">
+            <span class="absolute left-3 top-2 text-gray-400">🔍</span>
         </div>
     </header>
 
-    <div class="p-2">
-        <div class="bg-pink-100 rounded-lg p-6 text-center border-2 border-pink-300">
-            <h2 class="text-pink-600 font-bold text-lg">Special Discount! 🛍️</h2>
-            <p class="text-gray-600">Get 20% off on your first order</p>
+    <div class="flex gap-4 overflow-x-auto p-4 bg-white no-scrollbar">
+        <div class="cat-card">
+            <img src="https://images.meesho.com/images/products/314143425/v0u8n_512.webp" class="cat-img">
+            <p class="text-[10px] mt-1 font-medium">Shoes</p>
+        </div>
+        <div class="cat-card">
+            <img src="https://images.meesho.com/images/products/392765123/v0u8n_512.webp" class="cat-img">
+            <p class="text-[10px] mt-1 font-medium">Kurtis</p>
+        </div>
+        <div class="cat-card">
+            <div class="cat-img flex items-center justify-center text-2xl">🧸</div>
+            <p class="text-[10px] mt-1 font-medium">Kids</p>
+        </div>
+        <div class="cat-card">
+            <div class="cat-img flex items-center justify-center text-2xl">👔</div>
+            <p class="text-[10px] mt-1 font-medium">Men</p>
+        </div>
+        <div class="cat-card">
+            <div class="cat-img flex items-center justify-center text-2xl">💄</div>
+            <p class="text-[10px] mt-1 font-medium">Beauty</p>
         </div>
     </div>
 
-    <div class="flex gap-4 overflow-x-auto p-4 bg-white shadow-sm">
-        <button class="px-4 py-1 border rounded-full text-sm whitespace-nowrap bg-pink-50 border-pink-500 text-pink-500">All</button>
-        <button class="px-4 py-1 border rounded-full text-sm whitespace-nowrap">Sarees</button>
-        <button class="px-4 py-1 border rounded-full text-sm whitespace-nowrap">Kurti</button>
-        <button class="px-4 py-1 border rounded-full text-sm whitespace-nowrap">Men</button>
-        <button class="px-4 py-1 border rounded-full text-sm whitespace-nowrap">Kids</button>
+    <div class="p-3">
+        <div class="offer-banner p-4 text-white text-center shadow-lg">
+            <h2 class="text-xl font-black tracking-widest uppercase text-yellow-400">Offer Zone</h2>
+            <p class="text-[10px] font-bold">SALE FROM ₹99 | UP TO 80% OFF</p>
+        </div>
     </div>
 
-    <div id="product-list" class="grid grid-cols-2 gap-3 p-3">
-        <p class="col-span-2 text-center py-10 text-gray-400">Loading products...</p>
+    <div class="p-3">
+        <h3 class="font-bold text-gray-800 mb-3 border-l-4 border-pink-500 pl-2">Products For You</h3>
+        <div id="product-list" class="grid grid-cols-2 gap-3">
+            <p class="col-span-2 text-center py-10 text-gray-400">Loading Latest Collection...</p>
+        </div>
     </div>
 
     <script>
-        // Aapki Sheet ID jo aapne di thi
         const sheetID = "1MklWzZp2Hou4bOnMujBD9aYJo2nVhsq1tCr12cHyixY";
         const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json`;
 
@@ -58,31 +81,34 @@
 
                 let html = '';
                 rows.forEach((row, index) => {
-                    if (index === 0) return; // Header skip karne ke liye
+                    if (index === 0) return;
 
-                    const name = row.c[0] ? row.c[0].v : 'Product';
+                    const name = row.c[0] ? row.c[0].v : 'Meesho Product';
                     const price = row.c[1] ? row.c[1].v : '0';
                     const img = row.c[2] ? row.c[2].v : '';
 
                     if(img) {
                         html += `
-                        <div class="product-card bg-white">
-                            <img src="${img.trim()}" class="w-full h-40 object-contain p-2">
-                            <div class="p-2">
-                                <p class="text-gray-800 text-sm truncate font-medium">${name}</p>
-                                <p class="text-lg font-bold">₹${price} <span class="text-xs text-green-500">Free Delivery</span></p>
-                                <button class="mt-2 w-full meesho-pink text-white text-xs py-2 rounded">Buy Now</button>
+                        <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden flex flex-col">
+                            <img src="${img.trim()}" class="w-full h-48 object-contain p-2">
+                            <div class="p-2 bg-white">
+                                <p class="text-gray-500 text-[11px] truncate">${name}</p>
+                                <div class="flex items-center gap-1 mt-1">
+                                    <span class="text-lg font-bold">₹${price}</span>
+                                    <span class="text-[9px] text-gray-400 line-through">₹${parseInt(price)+200}</span>
+                                </div>
+                                <div class="bg-green-100 text-[9px] text-green-700 font-bold px-2 py-0.5 rounded-full inline-block mt-1">Free Delivery</div>
+                                <button class="mt-3 w-full meesho-pink text-white text-xs py-2 rounded font-bold">BUY NOW</button>
                             </div>
                         </div>`;
                     }
                 });
                 document.getElementById('product-list').innerHTML = html;
             } catch (e) {
-                document.getElementById('product-list').innerHTML = "Error: Sheet check karein!";
+                document.getElementById('product-list').innerHTML = "Check Sheet ID!";
             }
         }
         loadProducts();
     </script>
-
 </body>
 </html>
