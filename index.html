@@ -3,61 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NnCart - Meesho Style</title>
+    <title>NnCart - Order System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .meesho-pink { background-color: #f43397; }
         .product-card { border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        /* Order Pop-up Style */
+        #orderModal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
+        #orderModal.active { display: flex; }
     </style>
 </head>
 <body class="bg-gray-100">
 
-    <header class="meesho-pink p-4 sticky top-0 z-50">
-        <div class="flex items-center justify-between text-white">
-            <h1 class="text-xl font-bold italic">NnCart</h1>
-            <div class="flex gap-4">
-                <span>🔍</span>
-                <span>🛒</span>
-            </div>
+    <div id="orderModal">
+        <div class="bg-white w-full max-w-md rounded-xl p-6 shadow-2xl relative">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">📦 Order Details</h2>
+            <form id="orderForm" class="space-y-4">
+                <input type="hidden" id="p_name"> <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase">Aapka Naam</label>
+                    <input type="text" id="c_name" required class="w-full border-b-2 border-gray-200 p-2 outline-none focus:border-pink-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase">Mobile Number</label>
+                    <input type="tel" id="c_phone" required class="w-full border-b-2 border-gray-200 p-2 outline-none focus:border-pink-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase">Poora Pata (Address)</label>
+                    <textarea id="c_address" required class="w-full border-b-2 border-gray-200 p-2 outline-none focus:border-pink-500"></textarea>
+                </div>
+                <div class="flex gap-2 pt-4">
+                    <button type="button" onclick="closeOrder()" class="flex-1 py-3 font-bold text-gray-400">Cancel</button>
+                    <button type="submit" class="flex-1 meesho-pink text-white py-3 rounded-lg font-bold">Confirm Order</button>
+                </div>
+            </form>
         </div>
-        <div class="mt-3">
-            <input type="text" placeholder="Search for products..." class="w-full p-2 rounded-md outline-none text-gray-700">
+    </div>
+
+    <header class="meesho-pink p-4 sticky top-0 z-50">
+        <div class="flex items-center justify-between text-white font-bold italic text-xl">
+            <h1>NnCart</h1>
+            <div class="flex gap-4"><span>🔍</span><span>🛒</span></div>
         </div>
     </header>
 
-    <div class="p-2">
-        <div class="bg-pink-100 rounded-lg p-6 text-center border-2 border-pink-300">
-            <h2 class="text-pink-600 font-bold text-lg">Special Discount! 🛍️</h2>
-            <p class="text-gray-600">Get 20% off on your first order</p>
-        </div>
+    <div class="flex gap-4 overflow-x-auto p-4 bg-white shadow-sm no-scrollbar">
+        <button class="px-4 py-1 border rounded-full text-sm bg-pink-50 border-pink-500 text-pink-500">All</button>
+        <button class="px-4 py-1 border rounded-full text-sm whitespace-nowrap">Shoes</button>
+        <button class="px-4 py-1 border rounded-full text-sm whitespace-nowrap">Ladies Wear</button>
     </div>
 
-    <div class="flex gap-4 overflow-x-auto p-4 bg-white shadow-sm">
-        <button class="px-4 py-1 border rounded-full text-sm whitespace-nowrap bg-pink-50 border-pink-500 text-pink-500">All</button>
-        <button class="px-4 py-1 border rounded-full text-sm whitespace-nowrap">Sarees</button>
-        <button class="px-4 py-1 border rounded-full text-sm whitespace-nowrap">Kurti</button>
-        <button class="px-4 py-1 border rounded-full text-sm whitespace-nowrap">Men</button>
-        <button class="px-4 py-1 border rounded-full text-sm whitespace-nowrap">Kids</button>
+    <div id="product-list" class="grid grid-cols-2 gap-3 p-3">
+        <p class="col-span-2 text-center py-20 text-gray-400 animate-pulse">Products Load ho rahe hain...</p>
     </div>
 
-    <div class="grid grid-cols-2 gap-3 p-3">
-        <div class="product-card bg-white">
-            <img src="https://via.placeholder.com/200" class="w-full h-40 object-cover">
-            <div class="p-2">
-                <p class="text-gray-800 text-sm truncate font-medium">Stylish Kurtis for Women</p>
-                <p class="text-lg font-bold">₹299 <span class="text-xs text-green-500">Free Delivery</span></p>
-                <button class="mt-2 w-full meesho-pink text-white text-xs py-2 rounded">Buy Now</button>
-            </div>
-        </div>
-        <div class="product-card bg-white">
-            <img src="https://via.placeholder.com/200" class="w-full h-40 object-cover">
-            <div class="p-2">
-                <p class="text-gray-800 text-sm truncate font-medium">Men's Casual T-Shirt</p>
-                <p class="text-lg font-bold">₹199 <span class="text-xs text-green-500 font-normal">On Sale</span></p>
-                <button class="mt-2 w-full meesho-pink text-white text-xs py-2 rounded">Buy Now</button>
-            </div>
-        </div>
-    </div>
+    <script>
+        // --- 1. GOOGLE SHEET SETTINGS ---
+        const sheetID = "15PG60oUhda-ze8_36AZuFzO14fkxAwGVJwlQg8xWD4E";
+        const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json`;
 
+        // --- 2. DATA LOAD KARNA ---
+        async function fetchProducts() {
+            try {
+                const response = await fetch(url);
+                const text = await response.text();
+                const json = JSON.parse(text.substr(47).slice(0, -2));
+                const rows = json.table.rows;
+                let html = '';
+
+                rows.forEach((row, index) => {
+                    if (index === 0) return; // Header skip karein
+                    const name = row.c[0]?.v || 'NnCart Product';
+                    const price = row.c[1]?.v || '0';
+                    const img = row.c[2]?.v || 'https://via.placeholder.com/200';
+
+                    html += `
+                    <div class="product-card bg-white flex flex-col">
+                        <img src="${img}" class="w-full h-40 object-contain p-2">
+                        <div class="p-2 flex-1">
+                            <p class="text-gray-700 text-xs font-medium truncate">${name}</p>
+                            <p class="text-lg font-bold text-gray-900 mt-1">₹${price}</p>
+                            <p class="text-[10px] text-green-600 font-bold italic mb-2">Free Delivery</p>
+                            <button onclick="openOrder('${name}')" class="w-full meesho-pink text-white text-xs py-2 rounded font-bold">Buy Now</button>
+                        </div>
+                    </div>`;
+                });
+                document.getElementById('product-list').innerHTML = html;
+            } catch (e) {
+                document.getElementById('product-list').innerHTML = "Sheet ID check karein!";
+            }
+        }
+
+        // --- 3. ORDER FUNCTIONS ---
+        function openOrder(pName) {
+            document.getElementById('p_name').value = pName;
+            document.getElementById('orderModal').classList.add('active');
+        }
+
+        function closeOrder() {
+            document.getElementById('orderModal').classList.remove('active');
+        }
+
+        // Order Submit Logic
+        document.getElementById('orderForm').onsubmit = function(e) {
+            e.preventDefault();
+            const order = {
+                product: document.getElementById('p_name').value,
+                customer: document.getElementById('c_name').value,
+                phone: document.getElementById('c_phone').value,
+                address: document.getElementById('c_address').value
+            };
+            
+            // Abhi ke liye hum sirf Confirmation dikhayenge
+            alert(`Shukriya ${order.customer}!\n${order.product} ka order mil gaya hai.\nHum aapse ${order.phone} par contact karenge.`);
+            closeOrder();
+            this.reset();
+        };
+
+        fetchProducts();
+    </script>
 </body>
 </html>
