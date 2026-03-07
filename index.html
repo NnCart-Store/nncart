@@ -3,128 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NnCart Store</title>
+    <title>NnCart - Order Now</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .nn-pink { background-color: #f43397; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .cat-img { width: 65px; height: 65px; border-radius: 50%; border: 2px solid #fce7f3; padding: 2px; object-fit: cover; }
-        .offer-gradient { background: linear-gradient(135deg, #800000 0%, #f43397 100%); border-radius: 12px; }
-        
-        /* Sidebar Styles */
-        #sidebar { transition: 0.3s; left: -100%; position: fixed; top: 0; bottom: 0; width: 260px; background: white; z-index: 70; box-shadow: 10px 0 15px -3px rgba(0,0,0,0.1); }
+        #orderModal { display: none; }
+        #orderModal.active { display: flex; }
+        #sidebar { transition: 0.3s; left: -100%; position: fixed; top: 0; bottom: 0; width: 260px; background: white; z-index: 100; }
         #sidebar.active { left: 0; }
-        .overlay { display: none; background: rgba(0,0,0,0.5); position: fixed; inset: 0; z-index: 60; }
-        .overlay.active { display: block; }
     </style>
 </head>
 <body class="bg-gray-50">
 
-    <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
-    <div id="sidebar" class="p-6 overflow-y-auto">
-        <div class="flex justify-between items-center mb-8">
-            <h2 class="text-pink-600 font-bold text-2xl italic">NnCart</h2>
-            <button onclick="toggleMenu()" class="text-gray-400 text-3xl">&times;</button>
+    <div id="orderModal" class="fixed inset-0 bg-black/60 z-[200] items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Complete Your Order</h2>
+            <form id="checkoutForm" class="space-y-4">
+                <input type="hidden" id="orderedProduct">
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Full Name</label>
+                    <input type="text" id="custName" required class="w-full border-b-2 border-gray-100 p-2 outline-none focus:border-pink-500">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Phone Number</label>
+                    <input type="tel" id="custPhone" required class="w-full border-b-2 border-gray-100 p-2 outline-none focus:border-pink-500">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Address</label>
+                    <textarea id="custAddress" required class="w-full border-b-2 border-gray-100 p-2 outline-none focus:border-pink-500"></textarea>
+                </div>
+                <div class="flex gap-3 mt-6">
+                    <button type="button" onclick="closeOrder()" class="flex-1 py-3 text-gray-400 font-bold">Cancel</button>
+                    <button type="submit" class="flex-1 nn-pink text-white py-3 rounded-xl font-bold">Confirm Order</button>
+                </div>
+            </form>
         </div>
-        <nav class="space-y-6 text-gray-700 font-medium text-lg">
-            <a href="#" class="block border-b pb-2">🏠 Home</a>
-            <a href="#" class="block border-b pb-2">📦 My Orders</a>
-            <p class="text-xs text-gray-400 uppercase tracking-widest mt-4">Categories</p>
-            <a href="#" class="block border-b pb-2">👟 Shoes</a>
-            <a href="#" class="block border-b pb-2">👗 Ladies Wear</a>
-            <a href="#" class="block border-b pb-2">👔 Men's Wear</a>
-            <a href="#" class="block text-red-500 pt-10">🚪 Logout</a>
-        </nav>
     </div>
 
-    <header class="bg-white p-3 sticky top-0 z-50 shadow-sm">
-        <div class="flex items-center justify-between mb-3">
-            <div class="flex items-center gap-2">
-                <span class="text-gray-600 text-2xl cursor-pointer p-1" onclick="toggleMenu()">☰</span>
-                <h1 class="text-pink-600 font-bold text-2xl italic tracking-tight">NnCart</h1>
-            </div>
-            <div class="flex gap-4 text-gray-500 text-xl">
-                <span>❤️</span><span>🛒</span>
-            </div>
+    <header class="bg-white p-3 sticky top-0 z-50 shadow-sm flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <span class="text-gray-600 text-2xl cursor-pointer" onclick="toggleMenu()">☰</span>
+            <h1 class="text-pink-600 font-bold text-2xl italic">NnCart</h1>
         </div>
-        <div class="relative">
-            <input type="text" placeholder="Search for Suits, Shoes..." class="w-full p-2.5 pl-10 border border-gray-200 rounded-lg outline-none text-sm bg-gray-50">
-            <span class="absolute left-3 top-3 text-gray-400">🔍</span>
-        </div>
+        <div class="text-xl">🛒</div>
     </header>
 
-    <div class="flex gap-5 overflow-x-auto p-4 bg-white no-scrollbar border-b border-gray-100">
-        <div class="text-center min-w-[70px]">
-            <img src="https://images.meesho.com/images/products/314143425/v0u8n_512.webp" class="cat-img mx-auto">
-            <p class="text-[11px] mt-1.5 font-semibold text-gray-700">Shoes</p>
+    <div class="p-4 grid grid-cols-2 gap-3" id="product-list">
         </div>
-        <div class="text-center min-w-[70px]">
-            <img src="https://images.meesho.com/images/products/392765123/v0u8n_512.webp" class="cat-img mx-auto">
-            <p class="text-[11px] mt-1.5 font-semibold text-gray-700">Suits</p>
-        </div>
-        <div class="text-center min-w-[70px]"><div class="cat-img mx-auto flex items-center justify-center text-2xl bg-pink-50">🧸</div><p class="text-[11px] mt-1.5 font-semibold text-gray-700">Kids</p></div>
-        <div class="text-center min-w-[70px]"><div class="cat-img mx-auto flex items-center justify-center text-2xl bg-blue-50">👔</div><p class="text-[11px] mt-1.5 font-semibold text-gray-700">Men</p></div>
-        <div class="text-center min-w-[70px]"><div class="cat-img mx-auto flex items-center justify-center text-2xl bg-purple-50">👗</div><p class="text-[11px] mt-1.5 font-semibold text-gray-700">Ladies</p></div>
-    </div>
-
-    <div class="p-3">
-        <div class="offer-gradient p-5 text-white text-center shadow-md">
-            <h2 class="text-xl font-black tracking-widest uppercase text-yellow-300">NnCart Offer Zone</h2>
-            <p class="text-[11px] font-bold mt-1 opacity-90">CLOTHING & MORE | UP TO 40% OFF</p>
-            <div class="inline-block mt-2 bg-white text-pink-600 px-3 py-1 rounded-full text-[10px] font-bold">SHOP NOW</div>
-        </div>
-    </div>
-
-    <div class="p-3">
-        <div class="flex items-center gap-2 mb-4">
-            <div class="w-1.5 h-6 nn-pink rounded-full"></div>
-            <h3 class="font-bold text-gray-800 text-lg">Products For You</h3>
-        </div>
-        <div id="product-list" class="grid grid-cols-2 gap-3">
-            <p class="col-span-2 text-center py-20 text-gray-400 animate-pulse">Fetching Collection...</p>
-        </div>
-    </div>
 
     <script>
-        function toggleMenu() {
-            document.getElementById('sidebar').classList.toggle('active');
-            document.getElementById('overlay').classList.toggle('active');
+        function toggleMenu() { /* Pehle wala logic */ }
+
+        const sheetID = "15PG60oUhda-ze8_36AZuFzO14fkxAwGVJwlQg8xWD4E";
+        
+        // Buy Now Click Function
+        function openOrder(name) {
+            document.getElementById('orderedProduct').value = name;
+            document.getElementById('orderModal').classList.add('active');
         }
 
-        // --- CONNECTED TO YOUR NEW SHEET ---
-        const sheetID = "15PG60oUhda-ze8_36AZuFzO14fkxAwGVJwlQg8xWD4E"; 
-        const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json`;
+        function closeOrder() {
+            document.getElementById('orderModal').classList.remove('active');
+        }
+
+        // Form Submit hone par Google Sheet par data bhejna
+        document.getElementById('checkoutForm').onsubmit = function(e) {
+            e.preventDefault();
+            const orderData = {
+                product: document.getElementById('orderedProduct').value,
+                name: document.getElementById('custName').value,
+                phone: document.getElementById('custPhone').value,
+                address: document.getElementById('custAddress').value
+            };
+            
+            // Yahan hum ek alert dikhayenge (Asli order ke liye humein Google Script chahiye hogi)
+            alert(`Order Placed for ${orderData.product}!\nBhai, aapki Sheet mein data bhejne ke liye humein ek Google Script link karni hogi.`);
+            closeOrder();
+        };
 
         async function loadProducts() {
-            try {
-                const response = await fetch(url);
-                const text = await response.text();
-                const json = JSON.parse(text.substr(47).slice(0, -2));
-                const rows = json.table.rows;
-
-                let html = '';
-                rows.forEach((row, index) => {
-                    if (index === 0) return;
-                    const name = row.c[0] ? row.c[0].v : 'Product';
-                    const price = row.c[1] ? row.c[1].v : '0';
-                    const img = row.c[2] ? row.c[2].v : '';
-                    if(img) {
-                        html += `
-                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col">
-                            <img src="${img.trim()}" class="w-full h-44 object-contain p-3" onerror="this.src='https://via.placeholder.com/200?text=NnCart'">
-                            <div class="p-3">
-                                <p class="text-gray-500 text-[11px] font-medium truncate mb-1">${name}</p>
-                                <div class="flex items-baseline gap-1"><span class="text-lg font-bold text-gray-900">₹${price}</span></div>
-                                <div class="flex items-center gap-1 mt-1 text-green-600 font-bold text-[10px]">Free Delivery</div>
-                                <button class="mt-3 w-full nn-pink text-white text-xs py-2.5 rounded-lg font-bold">BUY NOW</button>
-                            </div>
-                        </div>`;
-                    }
-                });
-                document.getElementById('product-list').innerHTML = html || "<p class='col-span-2 text-center text-gray-400'>No products found. Add data to Column A, B, C in Sheet!</p>";
-            } catch (e) {
-                document.getElementById('product-list').innerHTML = "<p class='col-span-2 text-center text-red-500'>Error: Make sure Sheet is Public (Anyone with link)!</p>";
-            }
+            const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json`;
+            const response = await fetch(url);
+            const text = await response.text();
+            const json = JSON.parse(text.substr(47).slice(0, -2));
+            const rows = json.table.rows;
+            let html = '';
+            rows.forEach((row, index) => {
+                if (index === 0) return;
+                const name = row.c[0]?.v || 'Product';
+                const price = row.c[1]?.v || '0';
+                const img = row.c[2]?.v || '';
+                html += `
+                <div class="bg-white rounded-xl shadow-sm border p-2">
+                    <img src="${img}" class="w-full h-40 object-contain">
+                    <p class="text-sm font-bold mt-2">${name}</p>
+                    <p class="text-pink-600 font-bold">₹${price}</p>
+                    <button onclick="openOrder('${name}')" class="w-full nn-pink text-white py-2 rounded-lg mt-2 text-xs font-bold">BUY NOW</button>
+                </div>`;
+            });
+            document.getElementById('product-list').innerHTML = html;
         }
         loadProducts();
     </script>
