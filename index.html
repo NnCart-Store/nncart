@@ -28,21 +28,6 @@
         </div>
     </div>
 
-    <div id="sidebar" class="shadow-2xl overflow-y-auto">
-        <div class="p-6 border-b flex justify-between items-center">
-            <h2 class="text-pink-600 font-bold text-xl italic">All Categories</h2>
-            <button onclick="toggleMenu()" class="text-2xl text-gray-400">&times;</button>
-        </div>
-        <nav class="p-4 space-y-4 font-medium text-gray-700">
-            <a href="#" class="block p-2 border-b">👞 Shoes & Sandals</a>
-            <a href="#" class="block p-2 border-b">👡 Chappal</a>
-            <a href="#" class="block p-2 border-b">👕 T-Shirt & Sando</a>
-            <a href="#" class="block p-2 border-b">👔 Pant Shirt & Trouser</a>
-            <a href="#" class="block p-2 border-b">👗 Saari & Kurti</a>
-            <a href="#" onclick="logout()" class="block p-2 border-b text-red-500 font-bold">Door Logout</a>
-        </nav>
-    </div>
-
     <header class="bg-white p-4 sticky top-0 z-50 shadow-md flex items-center justify-between">
         <div class="flex items-center gap-3">
             <span class="text-2xl cursor-pointer" onclick="toggleMenu()">☰</span>
@@ -52,19 +37,6 @@
     </header>
 
     <main class="p-3">
-        <div class="bg-gradient-to-r from-pink-500 to-purple-600 rounded-2xl p-6 text-white mb-6 text-center shadow-lg">
-            <h2 class="text-xl font-bold">Today's Special Deal</h2>
-            <p class="text-sm opacity-90">Up to 60% Off on All Products</p>
-        </div>
-
-        <div class="flex gap-4 overflow-x-auto no-scrollbar mb-6 pb-2">
-            <button onclick="filterProducts('all')" class="nn-pink text-white px-6 py-2 rounded-full whitespace-nowrap text-sm font-bold shadow-md">All Products</button>
-            <button onclick="filterProducts('jins')" class="bg-white border px-6 py-2 rounded-full whitespace-nowrap text-sm font-medium">Jins</button>
-            <button onclick="filterProducts('saari')" class="bg-white border px-6 py-2 rounded-full whitespace-nowrap text-sm font-medium">Saari</button>
-            <button onclick="filterProducts('suit')" class="bg-white border px-6 py-2 rounded-full whitespace-nowrap text-sm font-medium">Suit</button>
-            <button onclick="filterProducts('shoes')" class="bg-white border px-6 py-2 rounded-full whitespace-nowrap text-sm font-medium">Shoes</button>
-        </div>
-
         <div id="product-list" class="grid grid-cols-2 gap-4 pb-24">
             </div>
     </main>
@@ -77,118 +49,111 @@
                 <input type="hidden" id="p_price">
                 
                 <div>
-                    <label class="text-xs font-bold text-gray-400 mb-1 block">SELECT SIZE</label>
-                    <select id="p_size" required class="w-full border p-3 rounded-xl outline-none bg-gray-50 focus:border-pink-500">
-                        <option value="">Size Chunein...</option>
-                        <option value="S">S - Small</option>
-                        <option value="M">M - Medium</option>
-                        <option value="L">L - Large</option>
-                        <option value="XL">XL - Extra Large</option>
-                        <option value="7">No. 7</option>
-                        <option value="8">No. 8</option>
-                        <option value="9">No. 9</option>
-                        <option value="10">No. 10</option>
+                    <label class="text-xs font-bold text-gray-400">SELECT SIZE</label>
+                    <select id="p_size" required class="w-full border p-3 rounded-xl bg-gray-50 outline-none focus:border-pink-500">
+                        <option value="">Choose Size...</option>
+                        <option value="S">S</option><option value="M">M</option>
+                        <option value="L">L</option><option value="XL">XL</option>
+                        <option value="7">7</option><option value="8">8</option>
+                        <option value="9">9</option><option value="10">10</option>
                     </select>
                 </div>
 
                 <input type="text" id="c_name" placeholder="Full Name" required class="w-full border p-3 rounded-xl outline-none focus:border-pink-500">
-                <input type="tel" id="c_phone" placeholder="WhatsApp Number" required class="w-full border p-3 rounded-xl outline-none focus:border-pink-500">
-                <textarea id="c_address" placeholder="Full Address with Landmark" required class="w-full border p-3 rounded-xl outline-none h-24 focus:border-pink-500"></textarea>
+                <input type="tel" id="c_phone" placeholder="Phone Number" required class="w-full border p-3 rounded-xl outline-none focus:border-pink-500">
+                <textarea id="c_address" placeholder="Full Address" required class="w-full border p-3 rounded-xl outline-none h-24 focus:border-pink-500"></textarea>
                 
                 <div class="flex gap-3">
-                    <button type="button" onclick="closeOrder()" class="flex-1 py-3 font-bold text-gray-400">Back</button>
-                    <button type="submit" class="flex-1 nn-pink text-white py-4 rounded-xl font-bold shadow-lg">Confirm Order</button>
+                    <button type="button" onclick="closeOrder()" class="flex-1 py-3 text-gray-400">Back</button>
+                    <button type="submit" id="orderBtn" class="flex-1 nn-pink text-white py-4 rounded-xl font-bold">Confirm Order</button>
                 </div>
             </form>
         </div>
     </div>
 
     <script>
-        // --- 1. LOGIN SYSTEM (Fix: Persistent Session) ---
-        window.onload = function() {
-            if (!localStorage.getItem("nncart_isLoggedIn")) {
-                document.getElementById('loginModal').classList.add('active');
-            }
+        // --- 1. LOGIN & SIDEBAR ---
+        window.onload = () => {
+            if (!localStorage.getItem("nn_isLoggedIn")) document.getElementById('loginModal').classList.add('active');
             loadProducts();
         };
-
         document.getElementById('loginForm').onsubmit = (e) => {
             e.preventDefault();
-            localStorage.setItem("nncart_isLoggedIn", "true");
+            localStorage.setItem("nn_isLoggedIn", "true");
             document.getElementById('loginModal').classList.remove('active');
         };
+        function toggleMenu() { /* Sidebar Toggle Code */ }
 
-        function logout() {
-            localStorage.removeItem("nncart_isLoggedIn");
-            location.reload();
-        }
-
-        function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
-
-        // --- 2. DATA LOADING (Google Sheets) ---
-        const sheetID = "15PG60oUhda-ze8_36AZuFzO14fkxAwGVJwlQg8xWD4E";
-        const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json`;
-        let allProducts = [];
-
+        // --- 2. LOAD PRODUCTS ---
         async function loadProducts() {
+            const sheetID = "15PG60oUhda-ze8_36AZuFzO14fkxAwGVJwlQg8xWD4E";
+            const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json`;
             try {
                 const res = await fetch(url);
                 const txt = await res.text();
                 const json = JSON.parse(txt.substr(47).slice(0, -2));
-                allProducts = json.table.rows;
-                displayProducts(allProducts);
-            } catch (err) { console.error("Data Load Error:", err); }
-        }
-
-        function displayProducts(rows, filter = 'all') {
-            let html = '';
-            rows.forEach((row, index) => {
-                if(index === 0) return; // Header row
-                const name = row.c[0]?.v || 'Product';
-                const price = row.c[1]?.v || '0';
-                const category = row.c[2]?.v ? row.c[2].v.toLowerCase().trim() : '';
-                const img = row.c[3]?.v || 'https://via.placeholder.com/150';
-
-                if(filter === 'all' || category === filter) {
+                let html = '';
+                json.table.rows.forEach((row, i) => {
+                    if(i===0) return;
+                    const name = row.c[0]?.v, price = row.c[1]?.v, img = row.c[3]?.v || 'https://via.placeholder.com/150';
                     html += `
-                    <div class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100">
-                        <img src="${img}" class="w-full h-44 object-cover rounded-xl mb-3">
+                    <div class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 text-center">
+                        <img src="${img}" class="w-full h-40 object-cover rounded-xl mb-2">
                         <h3 class="font-bold text-sm truncate">${name}</h3>
-                        <p class="text-pink-600 font-black mt-1">₹${price}</p>
-                        <button onclick="openOrder('${name}', '${price}')" class="w-full mt-3 py-2 text-xs font-bold border-2 border-pink-500 text-pink-500 rounded-xl hover:bg-pink-50 transition">Buy Now</button>
+                        <p class="text-pink-600 font-black">₹${price}</p>
+                        <button onclick="openOrder('${name}', '${price}')" class="w-full mt-2 py-2 border-2 border-pink-500 text-pink-500 rounded-xl text-xs font-bold">Buy Now</button>
                     </div>`;
-                }
-            });
-            document.getElementById('product-list').innerHTML = html;
+                });
+                document.getElementById('product-list').innerHTML = html;
+            } catch(e) { console.log("Error loading products"); }
         }
 
-        function filterProducts(cat) { displayProducts(allProducts, cat); }
-
-        // --- 3. ORDER HANDLING (WhatsApp Order with Size) ---
-        function openOrder(title, price) {
-            document.getElementById('p_title').value = title;
-            document.getElementById('p_price').value = price;
+        // --- 3. ORDER HANDLING (SheetDB System) ---
+        function openOrder(t, p) {
+            document.getElementById('p_title').value = t;
+            document.getElementById('p_price').value = p;
             document.getElementById('orderModal').classList.add('active');
         }
-
         function closeOrder() { document.getElementById('orderModal').classList.remove('active'); }
 
-        document.getElementById('orderForm').onsubmit = (e) => {
+        document.getElementById('orderForm').onsubmit = async (e) => {
             e.preventDefault();
-            const name = document.getElementById('c_name').value;
-            const phone = document.getElementById('c_phone').value;
-            const address = document.getElementById('c_address').value;
-            const product = document.getElementById('p_title').value;
-            const price = document.getElementById('p_price').value;
-            const size = document.getElementById('p_size').value;
+            const btn = document.getElementById('orderBtn');
+            btn.innerText = "Booking...";
+            btn.disabled = true;
 
-            // WHATSAPP MESSAGE (Size added)
-            const message = `*NnCart - Naya Order!*%0A------------------%0A*Item:* ${product}%0A*Price:* ₹${price}%0A*Size:* ${size}%0A------------------%0A*Customer:* ${name}%0A*Phone:* ${phone}%0A*Address:* ${address}`;
-            
-            // Apna WhatsApp number yahan set karein (Bina + ke)
-            const myNumber = "91XXXXXXXXXX"; 
-            window.open(`https://wa.me/${myNumber}?text=${message}`, '_blank');
-            closeOrder();
+            const orderData = {
+                "data": [{
+                    "Product": document.getElementById('p_title').value,
+                    "Price": document.getElementById('p_price').value,
+                    "Size": document.getElementById('p_size').value,
+                    "Customer_Name": document.getElementById('c_name').value,
+                    "Phone": document.getElementById('c_phone').value,
+                    "Address": document.getElementById('c_address').value,
+                    "Time": new Date().toLocaleString()
+                }]
+            };
+
+            try {
+                // IMPORTANT: Replace the URL below with your SheetDB API URL
+                const response = await fetch('https://sheetdb.io/api/v1/APNA_ID_DAALEIN', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(orderData)
+                });
+
+                if(response.ok) {
+                    alert("✅ Order Successful! Hum jald hi aapse sampark karenge.");
+                    closeOrder();
+                    e.target.reset();
+                } else {
+                    alert("❌ Error! API Check Karein.");
+                }
+            } catch (err) {
+                alert("❌ Connection Error!");
+            }
+            btn.innerText = "Confirm Order";
+            btn.disabled = false;
         };
     </script>
 </body>
