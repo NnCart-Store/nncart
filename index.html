@@ -64,15 +64,29 @@
             <button onclick="filterProducts('shirt')" class="bg-white border px-6 py-2 rounded-full whitespace-nowrap text-sm font-medium">Shirt</button>
         </div>
 
-        <div id="product-list" class="grid grid-cols-2 gap-4">
-            </div>
+        <div id="product-list" class="grid grid-cols-2 gap-4 pb-20"></div>
     </main>
 
+    <div id="orderModal" class="modal">
+        <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl">
+            <h3 class="text-xl font-bold mb-4">Delivery Details</h3>
+            <form id="orderForm" class="space-y-3">
+                <input type="hidden" id="p_title">
+                <input type="hidden" id="p_price">
+                <input type="text" id="c_name" placeholder="Apna Naam" required class="w-full border p-3 rounded-lg outline-none">
+                <input type="tel" id="c_phone" placeholder="WhatsApp Number" required class="w-full border p-3 rounded-lg outline-none">
+                <textarea id="c_address" placeholder="Pura Pata (Address)" required class="w-full border p-3 rounded-lg outline-none h-24"></textarea>
+                <div class="flex gap-3">
+                    <button type="button" onclick="closeOrder()" class="flex-1 py-3 font-bold text-gray-400">Back</button>
+                    <button type="submit" class="flex-1 nn-pink text-white py-3 rounded-xl font-bold">Confirm Order</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
-        // --- 1. LOGIN SYSTEM FIX ---
         window.onload = function() {
-            const isLoggedIn = localStorage.getItem("nncart_logged_in");
-            if (!isLoggedIn) {
+            if (!localStorage.getItem("nncart_logged_in")) {
                 document.getElementById('loginModal').classList.add('active');
             }
             loadProducts();
@@ -80,19 +94,13 @@
 
         document.getElementById('loginForm').onsubmit = (e) => {
             e.preventDefault();
-            // Yahan hum login save kar rahe hain
             localStorage.setItem("nncart_logged_in", "true");
             document.getElementById('loginModal').classList.remove('active');
         };
 
-        function logout() {
-            localStorage.removeItem("nncart_logged_in");
-            location.reload();
-        }
-
+        function logout() { localStorage.removeItem("nncart_logged_in"); location.reload(); }
         function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
 
-        // --- 2. GOOGLE SHEET DATA LOADING ---
         const sheetID = "15PG60oUhda-ze8_36AZuFzO14fkxAwGVJwlQg8xWD4E";
         const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json`;
         let allProducts = [];
@@ -104,16 +112,13 @@
                 const json = JSON.parse(txt.substr(47).slice(0, -2));
                 allProducts = json.table.rows;
                 displayProducts(allProducts);
-            } catch (error) {
-                console.log("Error loading data:", error);
-            }
+            } catch (error) { console.log("Error:", error); }
         }
 
         function displayProducts(rows, filter = 'all') {
             let html = '';
             rows.forEach((row, index) => {
-                if(index === 0) return; // Header skip
-                
+                if(index === 0) return;
                 const name = row.c[0]?.v || 'Product';
                 const price = row.c[1]?.v || '0';
                 const category = row.c[2]?.v ? row.c[2].v.toLowerCase() : '';
@@ -125,16 +130,38 @@
                         <img src="${img}" class="w-full h-40 object-cover rounded-xl mb-3">
                         <h3 class="font-bold text-sm truncate">${name}</h3>
                         <p class="text-pink-600 font-black mt-1">₹${price}</p>
-                        <button class="w-full mt-2 py-2 text-xs font-bold border border-pink-500 text-pink-500 rounded-lg">Buy Now</button>
+                        <button onclick="openOrder('${name}', '${price}')" class="w-full mt-2 py-2 text-xs font-bold border border-pink-500 text-pink-500 rounded-lg">Buy Now</button>
                     </div>`;
                 }
             });
             document.getElementById('product-list').innerHTML = html;
         }
 
-        function filterProducts(cat) {
-            displayProducts(allProducts, cat);
+        function filterProducts(cat) { displayProducts(allProducts, cat); }
+
+        // --- ORDER HANDLING ---
+        function openOrder(title, price) {
+            document.getElementById('p_title').value = title;
+            document.getElementById('p_price').value = price;
+            document.getElementById('orderModal').classList.add('active');
         }
+
+        function closeOrder() { document.getElementById('orderModal').classList.remove('active'); }
+
+        document.getElementById('orderForm').onsubmit = (e) => {
+            e.preventDefault();
+            const name = document.getElementById('c_name').value;
+            const phone = document.getElementById('c_phone').value;
+            const address = document.getElementById('c_address').value;
+            const product = document.getElementById('p_title').value;
+            const price = document.getElementById('p_price').value;
+
+            const message = `*NnCart - Naya Order!*%0A------------------%0A*Item:* ${product}%0A*Price:* ₹${price}%0A------------------%0A*Customer:* ${name}%0A*Phone:* ${phone}%0A*Address:* ${address}`;
+            
+            // Apna WhatsApp number yahan daalein (Bina + ke)
+            window.open(`https://wa.me/91XXXXXXXXXX?text=${message}`, '_blank');
+            closeOrder();
+        };
     </script>
 </body>
 </html>
