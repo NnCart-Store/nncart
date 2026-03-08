@@ -21,8 +21,8 @@
             <h2 class="text-2xl font-black text-pink-600 italic mb-2 text-center">NnCart</h2>
             <p class="text-center text-gray-500 mb-6 text-sm">Login to start shopping</p>
             <form id="loginForm" class="space-y-4">
-                <input type="email" id="userEmail" placeholder="Gmail ID" required class="w-full border p-3 rounded-xl outline-none focus:border-pink-500">
-                <input type="password" id="userPass" placeholder="Password" required class="w-full border p-3 rounded-xl outline-none focus:border-pink-500">
+                <input type="email" placeholder="Gmail ID" required class="w-full border p-3 rounded-xl outline-none focus:border-pink-500">
+                <input type="password" placeholder="Password" required class="w-full border p-3 rounded-xl outline-none focus:border-pink-500">
                 <button type="submit" class="w-full nn-pink text-white py-4 rounded-xl font-bold shadow-lg">Login Now</button>
             </form>
         </div>
@@ -39,7 +39,7 @@
             <a href="#" class="block p-2 border-b">👕 T-Shirt & Sando</a>
             <a href="#" class="block p-2 border-b">👔 Pant Shirt & Trouser</a>
             <a href="#" class="block p-2 border-b">👗 Saari & Kurti</a>
-            <a href="#" onclick="logout()" class="block p-2 border-b text-red-500">🚪 Logout</a>
+            <a href="#" onclick="logout()" class="block p-2 border-b text-red-500 font-bold">Door Logout</a>
         </nav>
     </div>
 
@@ -54,39 +54,59 @@
     <main class="p-3">
         <div class="bg-gradient-to-r from-pink-500 to-purple-600 rounded-2xl p-6 text-white mb-6 text-center shadow-lg">
             <h2 class="text-xl font-bold">Today's Special Deal</h2>
-            <p class="text-sm opacity-90">Up to 60% Off</p>
+            <p class="text-sm opacity-90">Up to 60% Off on All Products</p>
         </div>
 
-        <div class="flex gap-4 overflow-x-auto no-scrollbar mb-6 pb-2" id="category-filters">
-            <button onclick="filterProducts('all')" class="nn-pink text-white px-6 py-2 rounded-full whitespace-nowrap text-sm font-bold">All</button>
+        <div class="flex gap-4 overflow-x-auto no-scrollbar mb-6 pb-2">
+            <button onclick="filterProducts('all')" class="nn-pink text-white px-6 py-2 rounded-full whitespace-nowrap text-sm font-bold shadow-md">All Products</button>
             <button onclick="filterProducts('jins')" class="bg-white border px-6 py-2 rounded-full whitespace-nowrap text-sm font-medium">Jins</button>
             <button onclick="filterProducts('saari')" class="bg-white border px-6 py-2 rounded-full whitespace-nowrap text-sm font-medium">Saari</button>
-            <button onclick="filterProducts('shirt')" class="bg-white border px-6 py-2 rounded-full whitespace-nowrap text-sm font-medium">Shirt</button>
+            <button onclick="filterProducts('suit')" class="bg-white border px-6 py-2 rounded-full whitespace-nowrap text-sm font-medium">Suit</button>
+            <button onclick="filterProducts('shoes')" class="bg-white border px-6 py-2 rounded-full whitespace-nowrap text-sm font-medium">Shoes</button>
         </div>
 
-        <div id="product-list" class="grid grid-cols-2 gap-4 pb-20"></div>
+        <div id="product-list" class="grid grid-cols-2 gap-4 pb-24">
+            </div>
     </main>
 
     <div id="orderModal" class="modal">
         <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl">
-            <h3 class="text-xl font-bold mb-4">Delivery Details</h3>
-            <form id="orderForm" class="space-y-3">
+            <h3 class="text-xl font-bold mb-4">Confirm Order</h3>
+            <form id="orderForm" class="space-y-4">
                 <input type="hidden" id="p_title">
                 <input type="hidden" id="p_price">
-                <input type="text" id="c_name" placeholder="Apna Naam" required class="w-full border p-3 rounded-lg outline-none">
-                <input type="tel" id="c_phone" placeholder="WhatsApp Number" required class="w-full border p-3 rounded-lg outline-none">
-                <textarea id="c_address" placeholder="Pura Pata (Address)" required class="w-full border p-3 rounded-lg outline-none h-24"></textarea>
+                
+                <div>
+                    <label class="text-xs font-bold text-gray-400 mb-1 block">SELECT SIZE</label>
+                    <select id="p_size" required class="w-full border p-3 rounded-xl outline-none bg-gray-50 focus:border-pink-500">
+                        <option value="">Size Chunein...</option>
+                        <option value="S">S - Small</option>
+                        <option value="M">M - Medium</option>
+                        <option value="L">L - Large</option>
+                        <option value="XL">XL - Extra Large</option>
+                        <option value="7">No. 7</option>
+                        <option value="8">No. 8</option>
+                        <option value="9">No. 9</option>
+                        <option value="10">No. 10</option>
+                    </select>
+                </div>
+
+                <input type="text" id="c_name" placeholder="Full Name" required class="w-full border p-3 rounded-xl outline-none focus:border-pink-500">
+                <input type="tel" id="c_phone" placeholder="WhatsApp Number" required class="w-full border p-3 rounded-xl outline-none focus:border-pink-500">
+                <textarea id="c_address" placeholder="Full Address with Landmark" required class="w-full border p-3 rounded-xl outline-none h-24 focus:border-pink-500"></textarea>
+                
                 <div class="flex gap-3">
                     <button type="button" onclick="closeOrder()" class="flex-1 py-3 font-bold text-gray-400">Back</button>
-                    <button type="submit" class="flex-1 nn-pink text-white py-3 rounded-xl font-bold">Confirm Order</button>
+                    <button type="submit" class="flex-1 nn-pink text-white py-4 rounded-xl font-bold shadow-lg">Confirm Order</button>
                 </div>
             </form>
         </div>
     </div>
 
     <script>
+        // --- 1. LOGIN SYSTEM (Fix: Persistent Session) ---
         window.onload = function() {
-            if (!localStorage.getItem("nncart_logged_in")) {
+            if (!localStorage.getItem("nncart_isLoggedIn")) {
                 document.getElementById('loginModal').classList.add('active');
             }
             loadProducts();
@@ -94,13 +114,18 @@
 
         document.getElementById('loginForm').onsubmit = (e) => {
             e.preventDefault();
-            localStorage.setItem("nncart_logged_in", "true");
+            localStorage.setItem("nncart_isLoggedIn", "true");
             document.getElementById('loginModal').classList.remove('active');
         };
 
-        function logout() { localStorage.removeItem("nncart_logged_in"); location.reload(); }
+        function logout() {
+            localStorage.removeItem("nncart_isLoggedIn");
+            location.reload();
+        }
+
         function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
 
+        // --- 2. DATA LOADING (Google Sheets) ---
         const sheetID = "15PG60oUhda-ze8_36AZuFzO14fkxAwGVJwlQg8xWD4E";
         const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json`;
         let allProducts = [];
@@ -112,25 +137,25 @@
                 const json = JSON.parse(txt.substr(47).slice(0, -2));
                 allProducts = json.table.rows;
                 displayProducts(allProducts);
-            } catch (error) { console.log("Error:", error); }
+            } catch (err) { console.error("Data Load Error:", err); }
         }
 
         function displayProducts(rows, filter = 'all') {
             let html = '';
             rows.forEach((row, index) => {
-                if(index === 0) return;
+                if(index === 0) return; // Header row
                 const name = row.c[0]?.v || 'Product';
                 const price = row.c[1]?.v || '0';
-                const category = row.c[2]?.v ? row.c[2].v.toLowerCase() : '';
+                const category = row.c[2]?.v ? row.c[2].v.toLowerCase().trim() : '';
                 const img = row.c[3]?.v || 'https://via.placeholder.com/150';
 
                 if(filter === 'all' || category === filter) {
                     html += `
                     <div class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100">
-                        <img src="${img}" class="w-full h-40 object-cover rounded-xl mb-3">
+                        <img src="${img}" class="w-full h-44 object-cover rounded-xl mb-3">
                         <h3 class="font-bold text-sm truncate">${name}</h3>
                         <p class="text-pink-600 font-black mt-1">₹${price}</p>
-                        <button onclick="openOrder('${name}', '${price}')" class="w-full mt-2 py-2 text-xs font-bold border border-pink-500 text-pink-500 rounded-lg">Buy Now</button>
+                        <button onclick="openOrder('${name}', '${price}')" class="w-full mt-3 py-2 text-xs font-bold border-2 border-pink-500 text-pink-500 rounded-xl hover:bg-pink-50 transition">Buy Now</button>
                     </div>`;
                 }
             });
@@ -139,7 +164,7 @@
 
         function filterProducts(cat) { displayProducts(allProducts, cat); }
 
-        // --- ORDER HANDLING ---
+        // --- 3. ORDER HANDLING (WhatsApp Order with Size) ---
         function openOrder(title, price) {
             document.getElementById('p_title').value = title;
             document.getElementById('p_price').value = price;
@@ -155,11 +180,14 @@
             const address = document.getElementById('c_address').value;
             const product = document.getElementById('p_title').value;
             const price = document.getElementById('p_price').value;
+            const size = document.getElementById('p_size').value;
 
-            const message = `*NnCart - Naya Order!*%0A------------------%0A*Item:* ${product}%0A*Price:* ₹${price}%0A------------------%0A*Customer:* ${name}%0A*Phone:* ${phone}%0A*Address:* ${address}`;
+            // WHATSAPP MESSAGE (Size added)
+            const message = `*NnCart - Naya Order!*%0A------------------%0A*Item:* ${product}%0A*Price:* ₹${price}%0A*Size:* ${size}%0A------------------%0A*Customer:* ${name}%0A*Phone:* ${phone}%0A*Address:* ${address}`;
             
-            // Apna WhatsApp number yahan daalein (Bina + ke)
-            window.open(`https://wa.me/91XXXXXXXXXX?text=${message}`, '_blank');
+            // Apna WhatsApp number yahan set karein (Bina + ke)
+            const myNumber = "91XXXXXXXXXX"; 
+            window.open(`https://wa.me/${myNumber}?text=${message}`, '_blank');
             closeOrder();
         };
     </script>
