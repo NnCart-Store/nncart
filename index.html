@@ -157,23 +157,7 @@
                 function displayProducts(products) {
     let html = '';
     products.forEach(p => {
-        html += `
-        <div class="bg-white p-3 rounded-[2rem] shadow-sm border border-gray-100 flex flex-col justify-between">
-            <img src="${p.img}" class="w-full h-44 object-cover rounded-[1.5rem] mb-3">
-            <div class="px-1">
-                <h3 class="font-bold text-sm truncate text-gray-700">${p.name}</h3>
-                <div class="flex items-center justify-between mt-1">
-                    <p class="text-pink-600 font-black text-lg">₹${p.price}</p>
-                    <p class="text-[9px] text-green-600 font-black italic bg-green-50 px-2 py-0.5 rounded-md">FREE</p>
-                </div>
-            </div>
-            <button onclick="openOrder('${p.name}', '${p.price}', '${p.cat}')" class="w-full nn-pink text-white py-4 rounded-2xl text-[10px] font-black uppercase mt-3 tracking-widest shadow-md">Buy Now</button>
-        </div>`;
-    });
-    document.getElementById('product-list').innerHTML = html;
-                }
-
-                html += `
+      html += `
                 <div class="bg-white p-3 rounded-[2rem] shadow-sm border border-gray-100 flex flex-col justify-between hover:shadow-md transition">
                     <img src="${finalImg}" class="w-full h-44 object-cover rounded-[1.5rem] mb-3">
                     <div class="px-1">
