@@ -157,17 +157,31 @@
                 <h3 class="text-[12px] text-gray-500 leading-tight h-8 overflow-hidden">${p.name}</h3>
                 <div class="mt-1">
                     <span class="text-lg font-bold text-gray-900">₹${p.price}</span>
-                    <p class="text-[10px] text-gray-400">Free Delivery</p>
+                </div>
+                
+                <div class="mt-2">
+                    <label class="text-[10px] font-bold text-gray-400 uppercase">Bachhe ka Size chune</label>
+                    <select id="size-${p.name}" class="w-full mt-1 border border-gray-200 rounded p-1 text-[11px] focus:outline-none bg-pink-50">
+                        <option value="1-2 Years">1-2 saal</option>
+                        <option value="2-3 Years">2-3 saal</option>
+                        <option value="3-4 Years">3-4 saal</option>
+                        <option value="4-5 Years">4-5 saal</option>
+                        <option value="5-6 Years">5-6 saal</option>
+                        <option value="6-7 Years">6-7 saal</option>
+                        <option value="7-8 Years">7-8 saal</option>
+                        <option value="8-9 Years">8-9 saal</option>
+                        <option value="9-10 Years">9-10 saal</option>
+                    </select>
                 </div>
             </div>
-            <button onclick="openOrder('${p.name}', '${p.price}', '${p.cat || 'cloth'}')" class="mx-2 mb-2 border border-pink-500 text-pink-500 py-1.5 rounded-md text-[11px] font-bold">Buy Now</button>
+            <button onclick="const sz = document.getElementById('size-${p.name}').value; openOrder('${p.name}', '${p.price}', '${p.cat || 'footwear'}', sz)" class="mx-2 mb-2 border border-pink-500 text-pink-500 py-1.5 rounded-md text-[11px] font-bold">Buy Now</button>
         </div>`;
     });
     const list = document.getElementById('product-list');
-    // Niche wali line hi "grid-cols" banayegi
     list.className = "grid grid-cols-2 gap-2 p-2 bg-gray-50"; 
     list.innerHTML = html;
         }
+        
         
         
         // --- SEARCH LOGIC ---
