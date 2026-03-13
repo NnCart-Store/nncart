@@ -227,8 +227,8 @@
             document.getElementById('modalTitle').innerText = t;
             const sd = document.getElementById('p_size');
             sd.innerHTML = '<option value="">Choose Your Size</option>';
-            if(cat === "shoes") { [6,7,8,9,10,11].forEach(n => sd.innerHTML += `<option value="${n}">Size ${n}</option>`); }
-            else { ['Small','Medium','Large','XL','XXL'].forEach(s => sd.innerHTML += `<option value="${s}">${s} Size</option>`); }
+            if(cat === "shoes") { [4,5,6,7,8,9,10,11].forEach(n => sd.innerHTML += `<option value="${n}">Size ${n}</option>`); }
+            else { ['Small','Medium','Large','XL','XXL,'XXXL'].forEach(s => sd.innerHTML += `<option value="${s}">${s} Size</option>`); }
             document.getElementById('orderModal').classList.add('active');
         }
 
