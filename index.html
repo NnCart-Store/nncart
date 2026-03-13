@@ -43,28 +43,28 @@
         </div>
     </div>
 
-    <div class="flex justify-between p-4 overflow-x-auto no-scrollbar bg-white mb-2">
+    <div class="flex justify-between p-4 overflow-x-auto no-scrollbar bg-white mb-2 gap-4">
         <div class="text-center min-w-[75px]">
             <div class="w-16 h-16 rounded-full border-2 border-pink-100 mx-auto flex items-center justify-center p-1 bg-gray-50 overflow-hidden shadow-sm">
-                <img src="https://via.placeholder.com/60" alt="Shoes" class="rounded-full">
+                <img src="https://via.placeholder.com/60?text=Shoes" alt="Shoes" class="rounded-full">
             </div>
             <p class="text-[11px] font-bold mt-2 text-gray-700 uppercase">Shoes</p>
         </div>
         <div class="text-center min-w-[75px]">
             <div class="w-16 h-16 rounded-full border-2 border-pink-100 mx-auto flex items-center justify-center p-1 bg-gray-50 overflow-hidden shadow-sm">
-                <img src="https://via.placeholder.com/60" alt="Suits" class="rounded-full">
+                <img src="https://via.placeholder.com/60?text=Suits" alt="Suits" class="rounded-full">
             </div>
             <p class="text-[11px] font-bold mt-2 text-gray-700 uppercase">Suits</p>
         </div>
         <div class="text-center min-w-[75px]">
             <div class="w-16 h-16 rounded-full border-2 border-pink-100 mx-auto flex items-center justify-center p-1 bg-gray-50 overflow-hidden shadow-sm">
-                <img src="https://via.placeholder.com/60" alt="Kids" class="rounded-full">
+                <img src="https://via.placeholder.com/60?text=Kids" alt="Kids" class="rounded-full">
             </div>
             <p class="text-[11px] font-bold mt-2 text-gray-700 uppercase">Kids</p>
         </div>
         <div class="text-center min-w-[75px]">
             <div class="w-16 h-16 rounded-full border-2 border-pink-100 mx-auto flex items-center justify-center p-1 bg-gray-50 overflow-hidden shadow-sm">
-                <img src="https://via.placeholder.com/60" alt="Men" class="rounded-full">
+                <img src="https://via.placeholder.com/60?text=Men" alt="Men" class="rounded-full">
             </div>
             <p class="text-[11px] font-bold mt-2 text-gray-700 uppercase">Men</p>
         </div>
@@ -76,7 +76,7 @@
     </div>
 
     <main class="p-3">
-        <div id="product-list" class="grid grid-cols-2 gap-4 pb-24"></div>
+        <div id="product-list" class="flex flex-col gap-6 pb-24"></div>
     </main>
 
     <div id="orderModal" class="modal">
@@ -108,6 +108,7 @@
         window.onload = loadProducts;
 
         async function loadProducts() {
+            // Aapki Sheet ID
             const sheetID = "15PG60oUhda-ze8_36AZuFzO14fkxAwGVJwlQg8xWD4E";
             const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json`;
             try {
@@ -117,21 +118,29 @@
                 let html = '';
                 json.table.rows.forEach((row, i) => {
                     if(i===0) return;
-                    const name = row.c[0]?.v || "", price = row.c[1]?.v || "0", img = row.c[3]?.v || 'https://via.placeholder.com/150';
                     
-                    // Logic: Category decide karna
+                    // Column mapping as per your sheet: A=0(Name), B=1(Price), C=2(Image)
+                    const name = row.c[0]?.v || "";
+                    const price = row.c[1]?.v || "0";
+                    const img = row.c[2]?.v || 'https://via.placeholder.com/300?text=No+Photo';
+                    
                     let cat = (name.toLowerCase().match(/shoe|joota|sandal|footwear/)) ? "shoes" : "cloth";
 
                     html += `
-                    <div class="bg-white p-3 rounded-2xl shadow-sm border flex flex-col justify-between">
-                        <img src="${img}" class="w-full h-40 object-cover rounded-xl mb-2">
-                        <h3 class="font-bold text-sm truncate">${name}</h3>
-                        <p class="text-pink-600 font-black text-lg">₹${price}</p>
-                        <button onclick="openOrder('${name}', '${price}', '${cat}')" class="w-full nn-pink text-white py-3 rounded-xl text-[10px] font-black uppercase mt-2 shadow-md">Buy Now</button>
+                    <div class="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden flex flex-col w-full">
+                        <img src="${img}" class="w-full h-80 object-cover" onerror="this.src='https://via.placeholder.com/400x300?text=Image+Not+Found'">
+                        <div class="p-5">
+                            <h3 class="font-bold text-lg text-gray-800">${name}</h3>
+                            <p class="text-pink-600 font-black text-2xl mt-1">₹${price}</p>
+                            <button onclick="openOrder('${name}', '${price}', '${cat}')" 
+                                class="w-full nn-pink text-white py-4 rounded-xl text-xs font-black uppercase mt-4 shadow-lg active:scale-95 transition-all">
+                                Buy Now
+                            </button>
+                        </div>
                     </div>`;
                 });
                 document.getElementById('product-list').innerHTML = html;
-            } catch(e) { alert("Error loading products!"); }
+            } catch(e) { alert("Error loading products! Check Sheet Sharing Settings."); }
         }
 
         function openOrder(t, p, cat) {
@@ -171,6 +180,7 @@
             }]};
 
             try {
+                // Your SheetDB API
                 const res = await fetch('https://sheetdb.io/api/v1/rfknu3rjfri7s', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -188,8 +198,9 @@
                         btn.disabled = false;
                     }, 1500); 
                 }
-            } catch (error) { alert("Error!"); btn.disabled = false; }
+            } catch (error) { alert("Error!"); btn.disabled = false; btn.innerText = "Confirm Order"; }
         };
     </script>
 </body>
 </html>
+
