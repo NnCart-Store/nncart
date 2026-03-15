@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NnCart | Premium Mall</title>
+    <title>NnCart | Premium Store</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
@@ -11,9 +11,11 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #fcfcfd; margin: 0; padding: 0; overflow-x: hidden; }
         .pink-gradient { background: linear-gradient(135deg, #ff2d81 0%, #d61a5e 100%); }
         .floating-nav { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.3); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
-        .card-shadow { box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .card-shadow { box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
         .nav-circle { width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
         ::-webkit-scrollbar { display: none; }
+        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #ff2d81; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="pb-32">
@@ -21,51 +23,63 @@
     <header class="px-6 py-4 flex justify-between items-center bg-white sticky top-0 z-50">
         <div class="bg-gray-100 p-3 rounded-2xl"><i class="fa-solid fa-bars-staggered"></i></div>
         <h1 class="text-3xl font-extrabold text-[#ff2d81]">NnCart</h1>
-        <div class="bg-gray-100 p-3 rounded-2xl"><i class="fa-solid fa-cart-shopping"></i></div>
+        <div class="bg-gray-100 p-3 rounded-2xl relative">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span class="absolute -top-1 -right-1 bg-[#ff2d81] text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
+        </div>
     </header>
 
     <div class="px-6 mt-4">
-        <div class="pink-gradient rounded-[2.5rem] p-8 text-white relative overflow-hidden">
-            <h2 class="text-4xl font-black italic">MEGA SALE</h2>
+        <div class="pink-gradient rounded-[2.5rem] p-8 relative overflow-hidden text-white shadow-lg shadow-pink-200">
+            <h2 class="text-4xl font-black italic uppercase leading-none">MEGA SALE</h2>
             <p class="font-bold text-[10px] mt-2 tracking-[4px]">UPTO 40% OFF TODAY</p>
-            <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full"></div>
+            <button class="mt-6 bg-white text-[#ff2d81] px-8 py-2 rounded-full font-black text-[10px] uppercase">Shop Now</button>
+            <div class="absolute -right-5 -bottom-5 w-32 h-32 bg-white/10 rounded-full"></div>
         </div>
     </div>
 
-    <div class="px-6 mt-8 flex justify-between items-center">
-        <h3 class="text-xl font-extrabold text-gray-900">New Arrivals</h3>
+    <div class="px-6 mt-10 flex justify-between items-center">
+        <h3 class="text-2xl font-extrabold text-gray-900 tracking-tight">New Arrivals</h3>
+        <div class="flex gap-2">
+            <i class="fa-solid fa-circle-chevron-left text-2xl text-gray-200"></i>
+            <i class="fa-solid fa-circle-chevron-right text-2xl text-gray-400"></i>
+        </div>
     </div>
 
-    <main id="storeGrid" class="px-4 mt-6 grid grid-cols-2 gap-4 pb-20">
-        <div class="col-span-2 text-center py-20 text-gray-400 font-bold">Connecting Sheet...</div>
+    <main id="storeGrid" class="px-4 mt-6 grid grid-cols-2 gap-4 pb-32">
+        <div class="col-span-2 flex flex-col items-center py-20">
+            <div class="loader"></div>
+            <p class="mt-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Connecting Store...</p>
+        </div>
     </main>
 
     <div class="fixed bottom-8 inset-x-6 z-50">
         <nav class="floating-nav rounded-[2.5rem] p-3 flex justify-around items-center">
-            <button class="nav-circle bg-pink-50 text-[#ff2d81]"><i class="fa-solid fa-house"></i></button>
-            <button class="nav-circle text-gray-400"><i class="fa-solid fa-shop"></i></button>
-            <button class="nav-circle text-gray-400"><i class="fa-solid fa-user"></i></button>
+            <button class="nav-circle bg-pink-50 text-[#ff2d81]"><i class="fa-solid fa-house text-lg"></i></button>
+            <button class="nav-circle text-gray-400"><i class="fa-solid fa-shop text-lg"></i></button>
+            <button class="nav-circle text-gray-400"><i class="fa-solid fa-gift text-lg"></i></button>
+            <button class="nav-circle text-gray-400"><i class="fa-solid fa-user text-lg"></i></button>
         </nav>
     </div>
 
     <div id="orderModal" class="hidden fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-end justify-center">
-        <div class="bg-white w-full rounded-t-[3rem] p-8">
-            <h2 id="p_title" class="text-2xl font-black text-gray-800 uppercase italic">Item Name</h2>
+        <div class="bg-white w-full rounded-t-[3rem] p-8 animate-item">
+            <div class="w-12 h-1 bg-gray-200 rounded-full mx-auto mb-6" onclick="closeModal()"></div>
+            <h2 id="p_title" class="text-2xl font-black text-gray-800 uppercase italic leading-none">Item Name</h2>
             <p id="p_price_display" class="text-[#ff2d81] text-xl font-bold mb-6">₹000</p>
             <form id="orderForm" class="space-y-4">
                 <input type="hidden" id="p_name">
-                <select id="p_size" class="w-full bg-gray-50 rounded-2xl p-4 font-bold outline-none" required></select>
-                <input type="text" id="c_name" placeholder="Name" class="w-full bg-gray-50 rounded-2xl p-4 font-bold outline-none" required>
-                <input type="tel" id="c_phone" placeholder="WhatsApp" class="w-full bg-gray-50 rounded-2xl p-4 font-bold outline-none" required>
-                <textarea id="c_address" placeholder="Address" class="w-full bg-gray-50 rounded-2xl p-4 font-bold outline-none h-20" required></textarea>
-                <button type="submit" id="submitBtn" class="w-full pink-gradient text-white font-black py-5 rounded-[2rem] uppercase">Confirm Order</button>
+                <select id="p_size" class="w-full bg-gray-50 rounded-2xl p-4 font-bold outline-none text-sm" required></select>
+                <input type="text" id="c_name" placeholder="Your Name" class="w-full bg-gray-50 rounded-2xl p-4 font-bold outline-none text-sm" required>
+                <input type="tel" id="c_phone" placeholder="WhatsApp Number" class="w-full bg-gray-50 rounded-2xl p-4 font-bold outline-none text-sm" required>
+                <textarea id="c_address" placeholder="Full Delivery Address" class="w-full bg-gray-50 rounded-2xl p-4 font-bold outline-none text-sm h-20" required></textarea>
+                <button type="submit" id="submitBtn" class="w-full pink-gradient text-white font-black py-5 rounded-[2rem] uppercase tracking-widest text-xs">Confirm Order</button>
             </form>
-            <button onclick="closeModal()" class="w-full mt-2 text-gray-400 font-bold">Close</button>
         </div>
     </div>
 
     <script>
-        // TERI SHEET LINK KAR DI HAI IDHAR
+        // CONFIG TERI SHEET ID KE SATH
         const SID = '15PG60oUhda-ze8_36AZuFzO14fkxAwGVJwlQg8xWD4E';
         const SDB = 'https://sheetdb.io/api/v1/rfknu3rjfri7s';
 
@@ -75,9 +89,8 @@
                 const r = await fetch(url);
                 const t = await r.text();
                 const j = JSON.parse(t.substring(47, t.length - 2));
-                
                 const data = j.table.rows.map(row => {
-                    let rImg = row.c[4]?.v || ""; // Column E se photo
+                    let rImg = row.c[4]?.v || ""; // Column E for Image
                     let id = "";
                     if(rImg.includes('d/')) id = rImg.split('d/')[1].split('/')[0];
                     else if(rImg.includes('id=')) id = rImg.split('id=')[1].split('&')[0];
@@ -88,20 +101,20 @@
                     };
                 }).filter(x => x.name !== "");
                 render(data);
-            } catch (e) { document.getElementById('storeGrid').innerHTML = "Sheet Connection Failed. Check Permissions."; }
+            } catch (e) { document.getElementById('storeGrid').innerHTML = "<p class='col-span-2 text-center text-red-400'>Sheet Error: Check Share Settings</p>"; }
         }
 
         function render(list) {
             const grid = document.getElementById('storeGrid');
             grid.innerHTML = list.map(p => `
-                <div class="bg-white rounded-[2rem] p-2 card-shadow border border-gray-50">
-                    <div class="bg-gray-50 rounded-[1.5rem] overflow-hidden aspect-square mb-2 h-[140px]">
-                        <img src="${p.img}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/300?text=No+Image'">
+                <div class="bg-white rounded-[2rem] p-2 card-shadow flex flex-col border border-gray-50">
+                    <div class="bg-gray-50 rounded-[1.5rem] overflow-hidden aspect-square mb-2 h-[150px]">
+                        <img src="${p.img}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/300?text=Shoes'">
                     </div>
-                    <div class="px-1">
-                        <h4 class="font-bold text-gray-800 text-[10px] truncate uppercase">${p.name}</h4>
-                        <span class="text-[#ff2d81] font-black text-sm block mt-1 italic">₹${p.price}</span>
-                        <button onclick="openBuy('${p.name}', '${p.price}')" class="w-full mt-2 bg-black text-white py-2 rounded-xl text-[8px] font-black uppercase">Buy Now</button>
+                    <div class="px-1 pb-1">
+                        <h4 class="font-bold text-gray-800 text-[10px] truncate uppercase leading-tight">${p.name}</h4>
+                        <span class="text-[#ff2d81] font-black text-sm block mt-1">₹${p.price}</span>
+                        <button onclick="openBuy('${p.name}', '${p.price}')" class="w-full mt-2 bg-black text-white py-2.5 rounded-xl text-[8px] font-black uppercase tracking-widest">Buy Now</button>
                     </div>
                 </div>
             `).join('');
@@ -123,7 +136,7 @@
         document.getElementById('orderForm').onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
-            btn.innerText = "Saving..."; btn.disabled = true;
+            btn.innerText = "Processing..."; btn.disabled = true;
             const payload = { data: [{
                 "Name": document.getElementById('c_name').value,
                 "Phone": document.getElementById('c_phone').value,
@@ -134,7 +147,7 @@
             }]};
             try {
                 const res = await fetch(SDB, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
-                if(res.ok) { alert("Order Done!"); closeModal(); e.target.reset(); }
+                if(res.ok) { alert("Order Done! We will contact you."); closeModal(); e.target.reset(); }
             } catch (e) { alert("Error!"); }
             btn.innerText = "Confirm Order"; btn.disabled = false;
         };
