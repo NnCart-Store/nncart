@@ -169,8 +169,8 @@
             document.getElementById('modalPrice').innerText = '₹' + p;
             const sd = document.getElementById('p_size');
             sd.innerHTML = '<option value="">Select Your Size</option>';
-            if(cat === "shoes") [6,7,8,9,10,11].forEach(n => sd.innerHTML += `<option value="${n}">Size ${n} (UK/India)</option>`);
-            else ['S','M','L','XL','XXL'].forEach(s => sd.innerHTML += `<option value="${s}">Size ${s}</option>`);
+            if(cat === "shoes") [4,5,6,7,8,9,10,11].forEach(n => sd.innerHTML += `<option value="${n}">Size ${n} (India)</option>`);
+            else ['S','M','L','XL','XXL','XXXL'].forEach(s => sd.innerHTML += `<option value="${s}">Size ${s}</option>`);
             document.getElementById('orderModal').classList.add('active');
         }
 
