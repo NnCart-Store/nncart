@@ -3,376 +3,264 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NN CART | Premium Store</title>
+    <title>NnCart | Premium Mall</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
 
     <style>
-        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #fcfcfd; }
         
-        /* Smooth Scrolling */
-        html { scroll-behavior: smooth; }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 0px; }
-
-        /* Product Card Glassmorphism */
-        .product-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .product-card:active { transform: scale(0.96); }
-
-        .img-container {
-            position: relative;
-            overflow: hidden;
-            aspect-ratio: 1/1;
+        /* Premium Pink Gradient */
+        .pink-gradient {
+            background: linear-gradient(135deg, #ff2d81 0%, #d61a5e 100%);
         }
 
-        .img-container img {
-            transition: transform 0.5s ease;
+        /* Floating Navigation Style */
+        .floating-nav {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
 
-        /* Modal Animation */
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(8px);
-            z-index: 100;
-            animation: fadeIn 0.3s ease;
+        /* Shadow & Glow Effects */
+        .pink-glow { box-shadow: 0 10px 20px rgba(255, 45, 129, 0.3); }
+        .card-shadow { box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
+
+        /* Smooth Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-item { animation: fadeInUp 0.5s ease forwards; }
+
+        /* Circular Button Style */
+        .nav-circle {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal-content {
-            animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(100px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        /* Badge Animation */
-        .badge-new {
-            background: linear-gradient(45deg, #ef4444, #f97316);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.7; }
-            100% { opacity: 1; }
-        }
+        /* Hide Scrollbar */
+        ::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
         /* Loading Spinner */
         .loader {
             border: 3px solid #f3f3f3;
-            border-top: 3px solid #3b82f6;
+            border-top: 3px solid #ff2d81;
             border-radius: 50%;
-            width: 24px;
-            height: 24px;
+            width: 30px;
+            height: 30px;
             animation: spin 1s linear infinite;
         }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="bg-[#f8fafc] text-gray-900">
+<body class="pb-32">
 
-    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100">
-        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <div class="bg-blue-600 p-2 rounded-lg">
-                    <i class="fa-solid fa-bolt text-white text-xs"></i>
-                </div>
-                <h1 class="text-xl font-black tracking-tighter text-gray-800 uppercase">NN<span class="text-blue-600">CART</span></h1>
-            </div>
-            <div class="flex items-center gap-4 text-gray-500">
-                <i class="fa-solid fa-bell"></i>
-                <div class="relative">
-                    <i class="fa-solid fa-bag-shopping text-xl text-gray-800"></i>
-                    <span class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
-                </div>
-            </div>
+    <header class="px-6 py-4 flex justify-between items-center bg-white/50 backdrop-blur-md sticky top-0 z-50">
+        <div class="bg-gray-100 p-3 rounded-2xl">
+            <i class="fa-solid fa-bars-staggered text-gray-800 text-xl"></i>
         </div>
-
-        <div class="px-4 pb-3">
-            <div class="relative group">
-                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-600 transition-colors"></i>
-                <input type="text" id="searchInput" onkeyup="filterProducts()" placeholder="Search latest sneakers..." 
-                class="w-full bg-gray-100 border-none rounded-2xl py-3 pl-12 pr-4 text-sm focus:ring-2 focus:ring-blue-500 transition-all outline-none">
-            </div>
+        <h1 class="text-3xl font-extrabold tracking-tighter text-[#ff2d81]">NnCart</h1>
+        <div class="relative bg-gray-100 p-3 rounded-2xl">
+            <i class="fa-solid fa-cart-shopping text-gray-800 text-xl"></i>
+            <span class="absolute -top-1 -right-1 bg-[#ff2d81] text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold border-2 border-white">0</span>
         </div>
     </header>
 
-    <div class="flex gap-3 overflow-x-auto px-4 py-4 no-scrollbar">
-        <button onclick="filterCategory('all')" class="cat-btn active px-6 py-2 bg-blue-600 text-white rounded-full text-xs font-bold shadow-lg shadow-blue-100 whitespace-nowrap">All Items</button>
-        <button onclick="filterCategory('shoes')" class="cat-btn px-6 py-2 bg-white text-gray-500 border border-gray-100 rounded-full text-xs font-bold whitespace-nowrap">Sneakers</button>
-        <button onclick="filterCategory('apparel')" class="cat-btn px-6 py-2 bg-white text-gray-500 border border-gray-100 rounded-full text-xs font-bold whitespace-nowrap">Apparel</button>
-        <button onclick="filterCategory('trending')" class="cat-btn px-6 py-2 bg-white text-gray-500 border border-gray-100 rounded-full text-xs font-bold whitespace-nowrap">Trending</button>
+    <div class="px-6 mt-4">
+        <div class="relative group">
+            <i class="fa-solid fa-magnifying-glass absolute left-5 top-1/2 -translate-y-1/2 text-gray-400"></i>
+            <input type="text" id="search" onkeyup="searchProducts()" placeholder="What are you looking for?" 
+            class="w-full bg-gray-100/80 border-none rounded-[2rem] py-5 pl-14 pr-6 text-sm focus:ring-2 focus:ring-[#ff2d81]/20 outline-none transition-all">
+        </div>
     </div>
 
-    <main id="productGrid" class="px-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-32">
-        <div class="col-span-full py-20 flex flex-col items-center justify-center text-gray-400">
-            <div class="loader mb-4"></div>
-            <p class="text-xs font-medium uppercase tracking-widest">Loading Inventory...</p>
+    <div class="px-6 mt-8">
+        <div class="pink-gradient rounded-[2.5rem] p-8 relative overflow-hidden pink-glow animate-item">
+            <div class="relative z-10">
+                <h2 class="text-white text-4xl font-black italic tracking-wider leading-none uppercase">MEGA SALE</h2>
+                <p class="text-white/80 font-bold text-xs mt-3 tracking-[3px] uppercase">Upto 40% OFF TODAY</p>
+                <button class="mt-6 bg-white text-[#ff2d81] px-10 py-3 rounded-full font-black text-xs uppercase tracking-tighter">Shop Now</button>
+            </div>
+            <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full"></div>
+            <div class="absolute right-10 top-0 w-20 h-20 bg-white/5 rounded-full"></div>
+        </div>
+    </div>
+
+    <div class="px-6 mt-10 flex justify-between items-end">
+        <div>
+            <h3 class="text-2xl font-extrabold text-gray-900 tracking-tight">New Arrivals</h3>
+        </div>
+        <div class="flex gap-2">
+            <button class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:bg-white"><i class="fa-solid fa-arrow-left text-xs"></i></button>
+            <button class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:bg-white"><i class="fa-solid fa-arrow-right text-xs"></i></button>
+        </div>
+    </div>
+
+    <main id="storeGrid" class="px-6 mt-6 grid grid-cols-2 gap-6 pb-20">
+        <div class="col-span-full flex flex-col items-center py-20">
+            <div class="loader"></div>
+            <p class="mt-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Loading Catalog...</p>
         </div>
     </main>
 
-    <div id="buyModal" class="modal flex items-end sm:items-center justify-center">
-        <div class="modal-content bg-white w-full max-w-md rounded-t-[2.5rem] sm:rounded-[2.5rem] p-8 shadow-2xl relative">
-            <div onclick="closeModal()" class="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-6 sm:hidden cursor-pointer"></div>
+    <div class="fixed bottom-8 inset-x-6 z-50">
+        <nav class="floating-nav rounded-[2.5rem] p-3 flex justify-around items-center">
+            <button onclick="window.location.reload()" class="flex flex-col items-center gap-1 group">
+                <div class="nav-circle bg-pink-50 text-[#ff2d81]">
+                    <i class="fa-solid fa-house text-lg"></i>
+                </div>
+                <span class="text-[9px] font-bold text-[#ff2d81] uppercase tracking-tighter">Home</span>
+            </button>
+            <button class="flex flex-col items-center gap-1 text-gray-400">
+                <div class="nav-circle hover:bg-gray-50">
+                    <i class="fa-solid fa-shop text-lg"></i>
+                </div>
+                <span class="text-[9px] font-bold uppercase tracking-tighter">Store</span>
+            </button>
+            <button class="flex flex-col items-center gap-1 text-gray-400">
+                <div class="nav-circle hover:bg-gray-50">
+                    <i class="fa-solid fa-gift text-lg"></i>
+                </div>
+                <span class="text-[9px] font-bold uppercase tracking-tighter">Offers</span>
+            </button>
+            <button class="flex flex-col items-center gap-1 text-gray-400">
+                <div class="nav-circle hover:bg-gray-50">
+                    <i class="fa-solid fa-user text-lg"></i>
+                </div>
+                <span class="text-[9px] font-bold uppercase tracking-tighter">Account</span>
+            </button>
+        </nav>
+    </div>
+
+    <div id="orderModal" class="hidden fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-end justify-center">
+        <div class="bg-white w-full rounded-t-[3rem] p-8 animate-item">
+            <div class="w-12 h-1 bg-gray-200 rounded-full mx-auto mb-6" onclick="toggleModal()"></div>
+            <h2 id="p_title" class="text-2xl font-black text-gray-800 uppercase italic mb-2">Item Name</h2>
+            <p id="p_price_display" class="text-[#ff2d81] text-xl font-bold mb-6">₹000</p>
             
-            <div class="flex justify-between items-start mb-6">
-                <div>
-                    <h2 id="modalTitle" class="text-2xl font-black text-gray-900 leading-tight">Product Name</h2>
-                    <p class="text-blue-600 font-bold text-lg mt-1" id="modalPrice">₹0.00</p>
-                </div>
-                <button onclick="closeModal()" class="hidden sm:block text-gray-300 hover:text-gray-600 transition-colors">
-                    <i class="fa-solid fa-circle-xmark text-3xl"></i>
-                </button>
-            </div>
-
-            <form id="orderForm" class="space-y-5">
+            <form id="orderForm" class="space-y-4">
                 <input type="hidden" id="p_name">
-                
-                <div class="space-y-2">
-                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Available Sizes</label>
-                    <div id="sizeGrid" class="grid grid-cols-4 gap-2">
-                        </div>
-                    <input type="hidden" id="selectedSize" required>
-                </div>
-
-                <div class="relative">
-                    <i class="fa-solid fa-user absolute left-4 top-4 text-gray-400"></i>
-                    <input type="text" id="c_name" placeholder="Enter Full Name" class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-2xl py-4 pl-12 pr-4 outline-none transition-all font-semibold" required>
-                </div>
-
-                <div class="relative">
-                    <i class="fa-solid fa-whatsapp absolute left-4 top-4 text-gray-400"></i>
-                    <input type="tel" id="c_phone" placeholder="WhatsApp Number" class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-2xl py-4 pl-12 pr-4 outline-none transition-all font-semibold" required>
-                </div>
-
-                <div class="relative">
-                    <i class="fa-solid fa-location-dot absolute left-4 top-4 text-gray-400"></i>
-                    <textarea id="c_address" placeholder="Delivery Address with Landmark" class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-2xl py-4 pl-12 pr-4 outline-none transition-all font-semibold h-24" required></textarea>
-                </div>
-
-                <button type="submit" id="submitBtn" class="w-full bg-gray-900 hover:bg-black text-white font-black py-5 rounded-2xl shadow-xl transition-all transform active:scale-95 uppercase tracking-widest text-sm">
-                    Confirm Order
-                </button>
-                <p class="text-center text-[10px] text-gray-400 font-medium">Free Delivery & Cash on Delivery Available</p>
+                <select id="p_size" class="w-full bg-gray-50 rounded-2xl p-4 font-bold border-none outline-none" required>
+                    <option value="">Choose Size</option>
+                </select>
+                <input type="text" id="c_name" placeholder="Full Name" class="w-full bg-gray-50 rounded-2xl p-4 font-bold outline-none" required>
+                <input type="tel" id="c_phone" placeholder="WhatsApp Number" class="w-full bg-gray-50 rounded-2xl p-4 font-bold outline-none" required>
+                <textarea id="c_address" placeholder="Address" class="w-full bg-gray-50 rounded-2xl p-4 font-bold outline-none h-24" required></textarea>
+                <button type="submit" id="submitBtn" class="w-full pink-gradient text-white font-black py-5 rounded-[2rem] pink-glow uppercase tracking-widest">Confirm Order</button>
             </form>
         </div>
     </div>
 
-    <nav class="fixed bottom-6 inset-x-4 bg-gray-900/95 backdrop-blur-lg rounded-[2rem] p-4 flex justify-around items-center text-gray-500 z-50 shadow-2xl border border-white/10">
-        <button class="flex flex-col items-center gap-1 text-blue-400">
-            <i class="fa-solid fa-house-chimney-window text-xl"></i>
-            <span class="text-[9px] font-bold uppercase tracking-tighter">Shop</span>
-        </button>
-        <button class="flex flex-col items-center gap-1 hover:text-white transition-colors">
-            <i class="fa-solid fa-fire-flame-curved text-xl"></i>
-            <span class="text-[9px] font-bold uppercase tracking-tighter">New</span>
-        </button>
-        <button class="flex flex-col items-center gap-1 hover:text-white transition-colors">
-            <i class="fa-solid fa-heart text-xl"></i>
-            <span class="text-[9px] font-bold uppercase tracking-tighter">Favs</span>
-        </button>
-        <button class="flex flex-col items-center gap-1 hover:text-white transition-colors">
-            <i class="fa-solid fa-user-ninja text-xl"></i>
-            <span class="text-[9px] font-bold uppercase tracking-tighter">Profile</span>
-        </button>
-    </nav>
-
     <script>
-        const CONFIG = {
+        const API_CONFIG = {
             SID: '1n71f3014u50qI7yE7eBf0o33rEw5oIsk_u_o3m6HIn8',
             SNAME: 'Sheet1',
-            API: 'https://sheetdb.io/api/v1/rfknu3rjfri7s'
+            SHEETDB: 'https://sheetdb.io/api/v1/rfknu3rjfri7s'
         };
 
-        const DATA_URL = `https://docs.google.com/spreadsheets/d/${CONFIG.SID}/gviz/tq?tqx=out:json&sheet=${CONFIG.SNAME}`;
-        let productList = [];
+        let allData = [];
 
-        // Fetch Data from Google Sheet
-        async function init() {
+        async function fetchStore() {
+            const url = `https://docs.google.com/spreadsheets/d/${API_CONFIG.SID}/gviz/tq?tqx=out:json&sheet=${API_CONFIG.SNAME}`;
             try {
-                const response = await fetch(DATA_URL);
-                const rawText = await response.text();
-                const cleanJson = JSON.parse(rawText.substring(47, rawText.length - 2));
+                const r = await fetch(url);
+                const t = await r.text();
+                const j = JSON.parse(t.substring(47, t.length - 2));
                 
-                productList = cleanJson.table.rows.map((row, idx) => {
-                    const rawImg = row.c[4]?.v || ""; // Column E
-                    let driveId = "";
-                    let finalUrl = rawImg;
-
-                    if(rawImg.includes('drive.google.com')) {
-                        if(rawImg.includes('/d/')) driveId = rawImg.split('/d/')[1].split('/')[0];
-                        else if(rawImg.includes('id=')) driveId = rawImg.split('id=')[1].split('&')[0];
-                        if(driveId) finalUrl = `https://googleusercontent.com/profile/picture/0${driveId}`;
-                    }
-
+                allData = j.table.rows.map(row => {
+                    let rImg = row.c[4]?.v || ""; // Column E
+                    let id = "";
+                    if(rImg.includes('d/')) id = rImg.split('d/')[1].split('/')[0];
+                    else if(rImg.includes('id=')) id = rImg.split('id=')[1].split('&')[0];
+                    
                     return {
-                        id: idx,
-                        name: row.c[0]?.v || "Unknown Item",
+                        name: row.c[0]?.v || "",
                         price: row.c[1]?.v || "0",
-                        category: row.c[2]?.v || "shoes",
-                        img: finalUrl
+                        img: id ? `https://googleusercontent.com/profile/picture/0${id}` : rImg
                     };
-                }).filter(p => p.name !== "Unknown Item");
-
-                render(productList);
-            } catch (err) {
-                console.error("Critical Error:", err);
-                document.getElementById('productGrid').innerHTML = `<p class="col-span-full text-center py-10 text-red-500 font-bold">Failed to connect to store. Check Sheet settings.</p>`;
-            }
+                }).filter(x => x.name !== "");
+                render(allData);
+            } catch (e) { alert("Sheet Error!"); }
         }
 
-        // Render Cards to Grid
-        function render(items) {
-            const grid = document.getElementById('productGrid');
-            if(items.length === 0) {
-                grid.innerHTML = `<p class="col-span-full text-center py-20 text-gray-400 font-bold uppercase">No products found</p>`;
-                return;
-            }
-
-            grid.innerHTML = items.map(p => `
-                <div class="bg-white rounded-[2.5rem] p-3 product-card shadow-sm border border-gray-100 flex flex-col justify-between">
-                    <div>
-                        <div class="img-container rounded-[2rem] bg-gray-50 mb-4 group">
-                            <span class="absolute top-3 left-3 z-10 badge-new text-white text-[9px] font-black px-3 py-1 rounded-full uppercase italic">New Arrival</span>
-                            <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-110" 
-                            onerror="this.src='https://via.placeholder.com/400x400.png?text=Image+Not+Found'">
-                        </div>
-                        <h3 class="font-bold text-gray-800 text-sm px-1 truncate uppercase tracking-tight">${p.name}</h3>
-                        <div class="flex items-center gap-1 px-1 mt-1">
-                            <i class="fa-solid fa-star text-[10px] text-yellow-400"></i>
-                            <span class="text-[10px] font-bold text-gray-400">4.9 (120+ Reviews)</span>
-                        </div>
+        function render(list) {
+            const grid = document.getElementById('storeGrid');
+            grid.innerHTML = list.map(p => `
+                <div class="bg-white rounded-[2.5rem] p-3 card-shadow animate-item">
+                    <div class="bg-gray-50 rounded-[2rem] overflow-hidden aspect-square mb-4">
+                        <img src="${p.img}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/300?text=NnCart'">
                     </div>
-                    <div class="px-1 mt-4">
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="text-blue-600 font-black text-xl italic">₹${p.price}</span>
-                            <span class="bg-blue-50 text-blue-600 text-[10px] font-black px-2 py-1 rounded-lg">-20%</span>
-                        </div>
-                        <button onclick="openModal('${p.name}', '${p.price}')" 
-                        class="w-full bg-gray-900 text-white font-black py-4 rounded-2xl text-[10px] uppercase tracking-widest hover:bg-blue-600 transition-colors">
-                            Add to Cart
-                        </button>
+                    <h4 class="font-bold text-gray-800 text-[12px] px-2 truncate uppercase tracking-tight">${p.name}</h4>
+                    <div class="flex items-center justify-between px-2 mt-2 mb-2">
+                        <span class="text-[#ff2d81] font-black text-lg italic">₹${p.price}</span>
                     </div>
+                    <button onclick="openBuy('${p.name}', '${p.price}')" class="w-full bg-gray-900 text-white py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest">Buy Now</button>
                 </div>
             `).join('');
         }
 
-        // Filter Logic
-        function filterProducts() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = productList.filter(p => p.name.toLowerCase().includes(query));
-            render(filtered);
+        function searchProducts() {
+            const q = document.getElementById('search').value.toLowerCase();
+            render(allData.filter(p => p.name.toLowerCase().includes(q)));
         }
 
-        function filterCategory(cat) {
-            // Update UI buttons
-            document.querySelectorAll('.cat-btn').forEach(btn => {
-                btn.classList.remove('bg-blue-600', 'text-white', 'active', 'shadow-lg');
-                btn.classList.add('bg-white', 'text-gray-500');
-            });
-            event.target.classList.add('bg-blue-600', 'text-white', 'active', 'shadow-lg');
-            
-            if(cat === 'all') render(productList);
-            else {
-                const filtered = productList.filter(p => p.category.toLowerCase() === cat);
-                render(filtered);
-            }
-        }
-
-        // Modal Logic
-        function openModal(name, price) {
+        function openBuy(name, price) {
             document.getElementById('p_name').value = name;
-            document.getElementById('modalTitle').innerText = name;
-            document.getElementById('modalPrice').innerText = `₹${price}`;
-            
-            // Size Selection Logic (4-10)
-            const sizeGrid = document.getElementById('sizeGrid');
-            sizeGrid.innerHTML = '';
-            [4,5,6,7,8,9,10].forEach(num => {
-                const btn = document.createElement('div');
-                btn.className = 'size-option border-2 border-gray-100 rounded-xl py-3 text-center font-black text-sm cursor-pointer hover:border-blue-500 transition-all';
-                btn.innerText = num;
-                btn.onclick = function() {
-                    document.querySelectorAll('.size-option').forEach(opt => opt.classList.remove('bg-blue-600', 'text-white', 'border-blue-600'));
-                    this.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
-                    document.getElementById('selectedSize').value = num;
-                };
-                sizeGrid.appendChild(btn);
-            });
-
-            document.getElementById('buyModal').style.display = 'flex';
+            document.getElementById('p_title').innerText = name;
+            document.getElementById('p_price_display').innerText = `₹${price}`;
+            const sz = document.getElementById('p_size');
+            sz.innerHTML = '<option value="">Select Size</option>';
+            [4,5,6,7,8,9,10].forEach(n => sz.innerHTML += `<option value="${n}">Size ${n}</option>`);
+            document.getElementById('orderModal').classList.remove('hidden');
+            document.getElementById('orderModal').classList.add('flex');
         }
 
-        function closeModal() {
-            document.getElementById('buyModal').style.display = 'none';
+        function toggleModal() {
+            document.getElementById('orderModal').classList.add('hidden');
         }
 
-        // Order Submission
         document.getElementById('orderForm').onsubmit = async (e) => {
             e.preventDefault();
-            const sz = document.getElementById('selectedSize').value;
-            if(!sz) { alert("Please select a size first!"); return; }
-
             const btn = document.getElementById('submitBtn');
-            btn.innerHTML = `<div class="loader mx-auto"></div>`;
-            btn.disabled = true;
+            btn.innerText = "Processing..."; btn.disabled = true;
 
-            const orderData = {
-                "Name": document.getElementById('c_name').value,
-                "Phone": document.getElementById('c_phone').value,
-                "Product": document.getElementById('p_name').value,
-                "Size": sz,
-                "Address": document.getElementById('c_address').value,
-                "Timestamp": new Date().toLocaleString()
+            const payload = {
+                data: [{
+                    "Name": document.getElementById('c_name').value,
+                    "Phone": document.getElementById('c_phone').value,
+                    "Product": document.getElementById('p_name').value,
+                    "Size": document.getElementById('p_size').value,
+                    "Address": document.getElementById('c_address').value,
+                    "Date": new Date().toLocaleString()
+                }]
             };
 
             try {
-                const response = await fetch(CONFIG.API, {
+                const res = await fetch(API_CONFIG.SHEETDB, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ data: [orderData] })
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(payload)
                 });
-
-                if(response.ok) {
-                    alert("🚀 Order Placed Successfully!");
-                    closeModal();
+                if(res.ok) {
+                    alert("Order Success! 🎉");
+                    toggleModal();
                     e.target.reset();
                 }
-            } catch (err) {
-                alert("❌ Connection Error! Try again.");
-            } finally {
-                btn.innerText = "Confirm Order";
-                btn.disabled = false;
-            }
+            } catch (e) { alert("Error!"); }
+            btn.innerText = "Confirm Order"; btn.disabled = false;
         };
 
-        // Window Clicks
-        window.onclick = (e) => {
-            if(e.target == document.getElementById('buyModal')) closeModal();
-        };
-
-        // Initialize App
-        init();
+        fetchStore();
     </script>
 </body>
 </html>
