@@ -115,7 +115,7 @@
                 const txt = await res.text();
                 const json = JSON.parse(txt.substr(47).slice(0, -2));
                 allProducts = json.table.rows.map(row => {
-                    let rawImg = row.c[2]?.v || "";
+                    let rawImg = row.c[4]?.v || "";
                     let fImg = rawImg;
                     
                     // Fixed Image ID logic
