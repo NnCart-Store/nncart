@@ -155,17 +155,19 @@
                 const txt = await res.text();
                 const json = JSON.parse(txt.substr(47).slice(0, -2));
                 
-                allProducts = json.table.rows.map((row, index) => {
-                    let rawImg = row.c[4]?.v || "";
+                                allProducts = json.table.rows.map((row, index) => {
+                    let rawImg = row.c[4]?.v || ""; // Column E (index 4)
+                    let fileID = "";
                     let finalImg = rawImg;
                     
-                    // GOOGLE DRIVE DIRECT IMAGE ENGINE (ULTIMATE FIX)
                     if(rawImg.includes('drive.google.com')){
-                        let fileID = "";
-                        if(rawImg.includes('/d/')) fileID = rawImg.split('/d/')[1].split('/')[0];
-                        else if(rawImg.includes('id=')) fileID = rawImg.split('id=')[1].split('&')[0];
-                        // Using lh3 as primary and secondary redirect for bypass
-                        finalImg = `https://lh3.googleusercontent.com/d/${fileID}`;
+                        if(rawImg.includes('/d/')) {
+                            fileID = rawImg.split('/d/')[1].split('/')[0];
+                        } else if(rawImg.includes('id=')) {
+                            fileID = rawImg.split('id=')[1].split('&')[0];
+                        }
+                        // Ye link format Google Drive ke liye best hai
+                        if(fileID) finalImg = "https://lh3.googleusercontent.com/d/" + fileID;
                     }
 
                     return {
@@ -175,6 +177,7 @@
                         img: finalImg
                     };
                 }).filter(p => p.name !== "");
+                
 
                 displayProducts(allProducts);
             } catch(e) { 
